@@ -1,0 +1,9 @@
+/build
+/build/**/*.d.js
+/build/**/*.js
+/build/**/*.js.map
+/build/.tsbuildinfo
+/dist
+/import
+/node_modules
+/test
