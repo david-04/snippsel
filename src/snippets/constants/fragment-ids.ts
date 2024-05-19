@@ -28,7 +28,6 @@ export const FRAGMENT_ID = {
     readonly: { id: "readonly", shortcuts: "r", voiceCommands: "readonly", body: body.line("readonly") },
     static: { id: "static", shortcuts: "s", voiceCommands: "static", body: body.line("static") },
 
-    or: { id: "or", shortcuts: "o", voiceCommands: "or" },
     of: { id: "of", shortcuts: "o", voiceCommands: "of" },
 
     undefined: { id: "undefined", shortcuts: "u", voiceCommands: "undefined", body: body.line("undefined") },
@@ -48,11 +47,8 @@ export const FRAGMENT_ID = {
     map: { id: "map", shortcuts: "m", voiceCommands: "map" },
     readonlyMap: { id: "readonly-map", shortcuts: ["rm", "rom"], voiceCommands: "read-only map" },
 
-    variable: { id: "variable", shortcuts: "v", voiceCommands: "variable" },
     parameter: { id: "parameter", shortcuts: "p", voiceCommands: "parameter" },
-    optionalParameter: { id: "optional-parameter", shortcuts: "op", voiceCommands: "optional parameter" },
     property: { id: "property", shortcuts: "p", voiceCommands: "property" },
-    optionalProperty: { id: "optional-property", shortcuts: "op", voiceCommands: "optional property" },
-
-    parameterOrProperty: { id: "parameter|property", shortcuts: "p", voiceCommands: ["parameter", "property"] },
+    variable: { id: "variable", shortcuts: "v", voiceCommands: "variable" },
+    parameterOrProperty: { id: "property", shortcuts: "p", voiceCommands: ["parameter", "property"] },
 } as const satisfies Record<string, Partial<SnippetWithMandatoryLanguages>>;

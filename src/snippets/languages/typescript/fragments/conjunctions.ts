@@ -8,7 +8,13 @@ import { FRAGMENT_ID } from "../../../constants/fragment-ids.js";
 // |
 //----------------------------------------------------------------------------------------------------------------------
 
-export const or = fragment({ ...FRAGMENT_ID.or, languages: LANGUAGES.ts.tsx, body: body.line("|") });
+export const or = fragment({
+    id: "or",
+    languages: LANGUAGES.ts.tsx,
+    shortcuts: "o",
+    voiceCommands: "or",
+    body: body.line("|"),
+});
 
 //----------------------------------------------------------------------------------------------------------------------
 // :
@@ -17,9 +23,10 @@ export const or = fragment({ ...FRAGMENT_ID.or, languages: LANGUAGES.ts.tsx, bod
 export const colon = fragment({
     id: "colon",
     languages: LANGUAGES.js.jsx.ts.tsx,
-    shortcuts: [":", "a"],
-    voiceCommands: "as",
+    shortcuts: ":",
+    voiceCommands: "colon",
     body: body.line(":"),
+    aliases: [{ id: "as", shortcuts: "a", voiceCommands: "as" }],
 });
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -29,16 +36,8 @@ export const colon = fragment({
 export const is = fragment({
     id: "is",
     languages: LANGUAGES.js.jsx.ts.tsx,
-    shortcuts: ["=", "i"],
+    shortcuts: "i",
     voiceCommands: "is",
-    body: body.line("="),
-});
-
-export const isNoShortcut = fragment({
-    id: "is (no shortcut)",
-    languages: LANGUAGES.js.jsx.ts.tsx,
-    shortcuts: "",
-    voiceCommands: "",
     body: body.line("="),
 });
 

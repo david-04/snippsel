@@ -68,19 +68,37 @@ export const CURSOR = CursorPlaceholder.INSTANCE;
 export const SELECTED_TEXT = SelectedTextPlaceholder.INSTANCE;
 export const VARIABLE = (index: number, presetValue?: string) => new VariablePlaceholder(index, presetValue);
 
-export function placeholderFragment(): PermutableSnippet;
-export function placeholderFragment(index: number, presetValue?: string): PermutableSnippet;
-export function placeholderFragment(presetValue: string): PermutableSnippet;
-export function placeholderFragment(indexOrPresetValue?: number | string, presetValue?: string): PermutableSnippet {
-    const placeholder = VARIABLE(
-        "number" === typeof indexOrPresetValue ? indexOrPresetValue : 1,
-        "string" === typeof indexOrPresetValue ? indexOrPresetValue : presetValue
-    );
+// export function placeholderFragment(): PermutableSnippet;
+// export function placeholderFragment(index: number, presetValue?: string): PermutableSnippet;
+// export function placeholderFragment(presetValue: string): PermutableSnippet;
+// export function placeholderFragment(indexOrPresetValue?: number | string, presetValue?: string): PermutableSnippet {
+//     const placeholder = VARIABLE(
+//         "number" === typeof indexOrPresetValue ? indexOrPresetValue : 1,
+//         "string" === typeof indexOrPresetValue ? indexOrPresetValue : presetValue
+//     );
+//     return fragment({
+//         id: "",
+//         languages: LANGUAGES.all,
+//         shortcuts: "",
+//         voiceCommands: "",
+//         body: body.line(placeholder),
+//     });
+// }
+
+export function placeholder(): PermutableSnippet;
+export function placeholder(index: number, presetValue?: string): PermutableSnippet;
+export function placeholder(presetValue: string): PermutableSnippet;
+export function placeholder(indexOrPresetValue?: number | string, presetValue?: string): PermutableSnippet {
     return fragment({
         id: "",
         languages: LANGUAGES.all,
         shortcuts: "",
         voiceCommands: "",
-        body: body.line(placeholder),
+        body: body.line(
+            VARIABLE(
+                "number" === typeof indexOrPresetValue ? indexOrPresetValue : 1,
+                "string" === typeof indexOrPresetValue ? indexOrPresetValue : presetValue
+            )
+        ),
     });
 }

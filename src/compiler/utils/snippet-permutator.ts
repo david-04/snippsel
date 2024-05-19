@@ -5,7 +5,7 @@ import {
     OneOfPermutation,
     OptionalPermutation,
     PermutableSnippet,
-    SequenceAllPermutation,
+    SequencePermutation,
     SnippetFragment,
 } from "../data/snippet-fragment.js";
 import { SnippetMetadata, SnippetPostProcessingRule, postProcessSnippet } from "../data/snippet-post-processor.js";
@@ -46,7 +46,7 @@ function calculatePermutations(permutableSnippet: PermutableSnippet): Permutatio
                 return calculatePermutationsOneOf(permutableSnippet);
             case "optional":
                 return calculatePermutationsOptional(permutableSnippet);
-            case "sequence-all":
+            case "sequence":
                 return calculatePermutationsSequenceAll(permutableSnippet);
         }
     }
@@ -60,7 +60,7 @@ function calculatePermutationsOptional(permutableSnippet: OptionalPermutation): 
     return [[], ...calculatePermutations(permutableSnippet.fragment)];
 }
 
-function calculatePermutationsSequenceAll(permutableSnippet: SequenceAllPermutation): PermutationResult {
+function calculatePermutationsSequenceAll(permutableSnippet: SequencePermutation): PermutationResult {
     return cartesianProduct(permutableSnippet.fragments.map(calculatePermutations)).map(item => item.flat());
 }
 

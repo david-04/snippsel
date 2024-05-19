@@ -1,12 +1,7 @@
 import { createPermutations } from "../utils/snippet-permutator.js";
 import { LanguageBuilder, VSCODE_LANGUAGE_ID_TO_LANGUAGE_ID, VSCodeLanguageId } from "./language.js";
 import { SnippetBody } from "./snippet-body.js";
-import {
-    OneOfPermutation,
-    OptionalPermutation,
-    PermutableSnippet,
-    SequenceAllPermutation,
-} from "./snippet-fragment.js";
+import { OneOfPermutation, OptionalPermutation, PermutableSnippet, SequencePermutation } from "./snippet-fragment.js";
 import { SnippetPostProcessingRule } from "./snippet-post-processor.js";
 import { Snippet } from "./snippet.js";
 
@@ -54,7 +49,7 @@ export class SnippetRepository {
             this.addWithDefaultLanguage(param1, params as ReadonlyArray<SnippetWithOptionalLanguages>);
         } else if (
             param1 instanceof OneOfPermutation ||
-            param1 instanceof SequenceAllPermutation ||
+            param1 instanceof SequencePermutation ||
             param1 instanceof OptionalPermutation ||
             "leadingSeparator" in param1
         ) {

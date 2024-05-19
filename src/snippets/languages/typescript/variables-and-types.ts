@@ -1,21 +1,11 @@
 import { LANGUAGES } from "../../../compiler/data/language.js";
-import { VARIABLE, placeholderFragment } from "../../../compiler/data/placeholder.js";
+import { VARIABLE, placeholder } from "../../../compiler/data/placeholder.js";
 import { body } from "../../../compiler/data/snippet-body.js";
-import { fragment, oneOf, optional, sequence } from "../../../compiler/data/snippet-fragment.js";
+import { explicitOrImplied, fragment, oneOf, optional, sequence } from "../../../compiler/data/snippet-fragment.js";
 import { snippetRepository } from "../../../compiler/data/snippet-repository.js";
-import { as, colon, is, isNoShortcut } from "./fragments/conjunctions.js";
+import { colon, is } from "./fragments/conjunctions.js";
 import { _export } from "./fragments/modifiers.js";
-import {
-    scalarAndContainerTypes,
-    scalarAndContainerTypesAndValues,
-    types,
-    values,
-} from "./fragments/types-and-values.js";
-import {
-    propertyDeclaration,
-    variableDeclaration,
-    variableOrPropertyDeclaration,
-} from "./fragments/variable-parameter-property.js";
+import { propertyDeclaration, variableDeclaration } from "./fragments/variable-parameter-property.js";
 
 //---------------------------------------------------------------------------------------------------------------------
 // [export] type _ = _
@@ -25,159 +15,155 @@ import {
 snippetRepository.add(
     sequence(
         optional(_export),
-        oneOf(
-            fragment({
-                languages: LANGUAGES.ts.tsx,
-                id: "type",
-                shortcuts: "t",
-                voiceCommands: "type",
-                body: body.line("type ", VARIABLE(1)),
-            }),
-            fragment({
-                languages: LANGUAGES.ts.tsx,
-                id: "generic-type",
-                shortcuts: "gt",
-                voiceCommands: "generic type",
-                body: body.line("type ", VARIABLE(1), "<", VARIABLE(2, "T"), ">"),
-                aliases: [
-                    { id: "generic-type-of", shortcuts: "gto", voiceCommands: "generic type of" },
-                    { id: "generic-type-of-t", shortcuts: "gtot", voiceCommands: "generic type of T" },
-                    { id: "type-of", shortcuts: "to", voiceCommands: "type of" },
-                    { id: "type-of-T", shortcuts: "tot", voiceCommands: "type of T" },
-                ],
-            })
-        ),
-        oneOf(is, isNoShortcut),
-        placeholderFragment()
+        fragment({
+            languages: LANGUAGES.ts.tsx,
+            id: "type",
+            shortcuts: "t",
+            voiceCommands: "type",
+            body: body.line("type ", VARIABLE(1)),
+        }),
+        explicitOrImplied(is),
+        placeholder()
+    )
+);
+
+snippetRepository.add(
+    sequence(
+        optional(_export),
+        fragment({
+            languages: LANGUAGES.ts.tsx,
+            id: "generic-type",
+            shortcuts: "gt",
+            voiceCommands: "generic type",
+            body: body.line("type ", VARIABLE(1), "<", VARIABLE(2, "T"), ">"),
+            aliases: [
+                { id: "generic-type-of", shortcuts: "gto", voiceCommands: "generic type of" },
+                { id: "type-of", shortcuts: "to", voiceCommands: "type of" },
+            ],
+        }),
+        explicitOrImplied(is),
+        placeholder()
     )
 );
 
 //----------------------------------------------------------------------------------------------------------------------
 // variable _ [: _] = _
 // property _ [: _] [= _]
-//----------------------------------------------------------------------------------------------------------------------
-
-snippetRepository.add(
-    sequence(
-        variableDeclaration,
-        optional(sequence(colon, placeholderFragment())),
-        oneOf(is, isNoShortcut),
-        placeholderFragment()
-    )
-);
-
-snippetRepository.add(
-    sequence(
-        propertyDeclaration,
-        optional(sequence(colon, placeholderFragment())),
-        optional(sequence(is, placeholderFragment()))
-    ),
-    [
-        { ifId: "parameter|property", discardSnippet: true },
-        { removeShortcut: "p" }, // conflicts with print
-        { removeShortcut: "ip" }, // conflicts with interpolation
-        { removeShortcut: "pi" }, // conflicts with print-interpolated
-    ]
-);
-
-//----------------------------------------------------------------------------------------------------------------------
-// variable|property _ : type [=]
-//----------------------------------------------------------------------------------------------------------------------
-
-snippetRepository.add(
-    sequence(variableOrPropertyDeclaration, colon, oneOf(...types), optional(sequence(is, placeholderFragment()))),
-    [
-        { removeShortcut: "ps" }, // conflicts with print-string
-    ]
-);
-
-//----------------------------------------------------------------------------------------------------------------------
-// variable|property : type = value
-//----------------------------------------------------------------------------------------------------------------------
-
-for (const [type, value] of scalarAndContainerTypesAndValues) {
-    snippetRepository.add(sequence(variableOrPropertyDeclaration, colon, type, is, value));
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-// variable|property [:] = value
-//----------------------------------------------------------------------------------------------------------------------
-
-for (const value of values) {
-    snippetRepository.add(
-        sequence(variableOrPropertyDeclaration, optional(sequence(colon, placeholderFragment())), is, value),
-        [
-            { removeShortcut: "pis" }, // conflicts with print-interpolated-string
-        ]
-    );
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-// variable|property = value as type
-//----------------------------------------------------------------------------------------------------------------------
-
-for (const [type, value] of scalarAndContainerTypesAndValues) {
-    snippetRepository.add(sequence(variableOrPropertyDeclaration, is, value, as, type));
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-// [:] type [=]
+//          _ [: _] [= _]
 //----------------------------------------------------------------------------------------------------------------------
 
 snippetRepository.add(
     oneOf(
-        // type
-        oneOf(...scalarAndContainerTypes),
-        // : type
-        sequence(colon, oneOf(...types)),
-        // type =
-        sequence(oneOf(...types), is),
-        // : type =
-        sequence(colon, oneOf(...types), is)
+        sequence(variableDeclaration, optional(sequence(colon, placeholder())), explicitOrImplied(is), placeholder()),
+        sequence(propertyDeclaration, optional(sequence(colon, placeholder())), optional(sequence(is, placeholder())))
     ),
     [
-        { removeShortcut: "aae" }, // conflicts with async-arrow-expression
-        { removeShortcut: "aaf" }, // conflicts with async-arrow-function
+        { removeShortcut: "a" }, //     conflicts with array
+        { removeShortcut: "i" }, //     conflicts with if
+        { removeShortcut: "ip" }, //    conflicts with interpolation
+        { removeShortcut: "p" }, //     conflicts with print
+        { removeShortcut: "pi" }, //    conflicts with print-interpolated
     ]
 );
 
-//----------------------------------------------------------------------------------------------------------------------
-// [:] type = value
-//----------------------------------------------------------------------------------------------------------------------
+// //----------------------------------------------------------------------------------------------------------------------
+// // variable|property _ : type [=]
+// //----------------------------------------------------------------------------------------------------------------------
 
-for (const [type, value] of scalarAndContainerTypesAndValues) {
-    snippetRepository.add(sequence(optional(colon), type, is, value));
-}
+// snippetRepository.add(
+//     sequence(variableOrPropertyDeclaration, colon, oneOf(...types), optional(sequence(is, placeholder()))),
+//     [
+//         { removeShortcut: "ps" }, // conflicts with print-string
+//     ]
+// );
 
-//----------------------------------------------------------------------------------------------------------------------
-// [=] value
-//----------------------------------------------------------------------------------------------------------------------
+// //----------------------------------------------------------------------------------------------------------------------
+// // variable|property : type = value
+// //----------------------------------------------------------------------------------------------------------------------
 
-for (const value of values) {
-    snippetRepository.add(sequence(optional(is), value), [
-        { removeShortcut: "a" }, // conflicts with array
-        { removeShortcut: "if" }, // conflicts with interface
-        { removeShortcut: "it" }, // conflicts with it (test case)
-        { removeShortcut: "t" }, // conflicts with type
-        { removeShortcut: "s", removeVoiceCommand: "string" }, // conflicts with string (type vs literal)
-    ]);
-}
+// for (const [type, value] of scalarAndContainerTypesAndValues) {
+//     snippetRepository.add(sequence(variableOrPropertyDeclaration, colon, type, is, value));
+// }
 
-//----------------------------------------------------------------------------------------------------------------------
-// [=] value as type
-//----------------------------------------------------------------------------------------------------------------------
+// //----------------------------------------------------------------------------------------------------------------------
+// // variable|property [: _] = value
+// //----------------------------------------------------------------------------------------------------------------------
 
-for (const [type, value] of scalarAndContainerTypesAndValues) {
-    snippetRepository.add(sequence(optional(is), value, as, type));
-}
+// for (const value of values) {
+//     snippetRepository.add(
+//         sequence(variableOrPropertyDeclaration, optional(sequence(colon, placeholder())), is, value),
+//         [
+//             { removeShortcut: "pis" }, // conflicts with print-interpolated-string
+//         ]
+//     );
+// }
 
-//----------------------------------------------------------------------------------------------------------------------
-// = _ as type
-//----------------------------------------------------------------------------------------------------------------------
+// //----------------------------------------------------------------------------------------------------------------------
+// // variable|property = value as type
+// //----------------------------------------------------------------------------------------------------------------------
 
-for (const type of types) {
-    snippetRepository.add(sequence(is, placeholderFragment(), as, type), [
-        { removeShortcut: ["=aae", "iaae"] }, // conflicts with =-async-arrow-expression
-        { removeShortcut: ["=aaf", "iaaf"] }, // conflicts with =-async-arrow-function
-    ]);
-}
+// for (const [type, value] of scalarAndContainerTypesAndValues) {
+//     snippetRepository.add(sequence(variableOrPropertyDeclaration, is, value, as, type));
+// }
+
+// //----------------------------------------------------------------------------------------------------------------------
+// // [:] type [=]
+// //----------------------------------------------------------------------------------------------------------------------
+
+// snippetRepository.add(
+//     oneOf(
+//         // type
+//         oneOf(...scalarAndContainerTypes),
+//         // : type
+//         sequence(colon, oneOf(...types)),
+//         // type =
+//         sequence(oneOf(...types), is),
+//         // : type =
+//         sequence(colon, oneOf(...types), is)
+//     ),
+//     [
+//         { removeShortcut: "aae" }, // conflicts with async-arrow-expression
+//         { removeShortcut: "aaf" }, // conflicts with async-arrow-function
+//     ]
+// );
+
+// //----------------------------------------------------------------------------------------------------------------------
+// // [:] type = value
+// //----------------------------------------------------------------------------------------------------------------------
+
+// for (const [type, value] of scalarAndContainerTypesAndValues) {
+//     snippetRepository.add(sequence(optional(colon), type, is, value));
+// }
+
+// //----------------------------------------------------------------------------------------------------------------------
+// // [=] value
+// //----------------------------------------------------------------------------------------------------------------------
+
+// for (const value of values) {
+//     snippetRepository.add(sequence(optional(is), value), [
+//         { removeShortcut: "a" }, // conflicts with array
+//         { removeShortcut: "if" }, // conflicts with interface
+//         { removeShortcut: "it" }, // conflicts with it (test case)
+//         { removeShortcut: "t" }, // conflicts with type
+//         { removeShortcut: "s", removeVoiceCommand: "string" }, // conflicts with string (type vs literal)
+//     ]);
+// }
+
+// //----------------------------------------------------------------------------------------------------------------------
+// // [=] value as type
+// //----------------------------------------------------------------------------------------------------------------------
+
+// for (const [type, value] of scalarAndContainerTypesAndValues) {
+//     snippetRepository.add(sequence(optional(is), value, as, type));
+// }
+
+// //----------------------------------------------------------------------------------------------------------------------
+// // = _ as type
+// //----------------------------------------------------------------------------------------------------------------------
+
+// for (const type of types) {
+//     snippetRepository.add(sequence(is, placeholder(), as, type), [
+//         { removeShortcut: ["=aae", "iaae"] }, // conflicts with =-async-arrow-expression
+//         { removeShortcut: ["=aaf", "iaaf"] }, // conflicts with =-async-arrow-function
+//     ]);
+// }
