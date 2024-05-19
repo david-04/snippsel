@@ -4,7 +4,7 @@
 
 import { LANGUAGES } from "./language.js";
 import { body } from "./snippet-body.js";
-import { SnippetFragment, fragment } from "./snippet-fragment.js";
+import { PermutableSnippet, fragment } from "./snippet-fragment.js";
 
 export class CursorPlaceholder {
     private constructor() {}
@@ -68,10 +68,10 @@ export const CURSOR = CursorPlaceholder.INSTANCE;
 export const SELECTED_TEXT = SelectedTextPlaceholder.INSTANCE;
 export const VARIABLE = (index: number, presetValue?: string) => new VariablePlaceholder(index, presetValue);
 
-export function placeholderFragment(): SnippetFragment;
-export function placeholderFragment(index: number, presetValue?: string): SnippetFragment;
-export function placeholderFragment(presetValue: string): SnippetFragment;
-export function placeholderFragment(indexOrPresetValue?: number | string, presetValue?: string): SnippetFragment {
+export function placeholderFragment(): PermutableSnippet;
+export function placeholderFragment(index: number, presetValue?: string): PermutableSnippet;
+export function placeholderFragment(presetValue: string): PermutableSnippet;
+export function placeholderFragment(indexOrPresetValue?: number | string, presetValue?: string): PermutableSnippet {
     const placeholder = VARIABLE(
         "number" === typeof indexOrPresetValue ? indexOrPresetValue : 1,
         "string" === typeof indexOrPresetValue ? indexOrPresetValue : presetValue

@@ -1,7 +1,7 @@
 import { LANGUAGES } from "../../../compiler/data/language.js";
 import { VARIABLE, placeholderFragment } from "../../../compiler/data/placeholder.js";
 import { body } from "../../../compiler/data/snippet-body.js";
-import { fragment, oneOf, optional, sequenceAll } from "../../../compiler/data/snippet-fragment.js";
+import { fragment, oneOf, optional, sequence } from "../../../compiler/data/snippet-fragment.js";
 import { snippetRepository } from "../../../compiler/data/snippet-repository.js";
 import { as, colon, is, isNoShortcut } from "./fragments/conjunctions.js";
 import { _export } from "./fragments/modifiers.js";
@@ -23,7 +23,7 @@ import {
 //----------------------------------------------------------------------------------------------------------------------
 
 snippetRepository.add(
-    sequenceAll(
+    sequence(
         optional(_export),
         oneOf(
             fragment({
@@ -35,10 +35,16 @@ snippetRepository.add(
             }),
             fragment({
                 languages: LANGUAGES.ts.tsx,
-                id: "type<T>",
-                shortcuts: ["gt", "gto", "gtot", "to", "tot"],
-                voiceCommands: ["generic type", "type of", "type of T", "generic type of T"],
+                id: "generic-type",
+                shortcuts: "gt",
+                voiceCommands: "generic type",
                 body: body.line("type ", VARIABLE(1), "<", VARIABLE(2, "T"), ">"),
+                aliases: [
+                    { id: "generic-type-of", shortcuts: "gto", voiceCommands: "generic type of" },
+                    { id: "generic-type-of-t", shortcuts: "gtot", voiceCommands: "generic type of T" },
+                    { id: "type-of", shortcuts: "to", voiceCommands: "type of" },
+                    { id: "type-of-T", shortcuts: "tot", voiceCommands: "type of T" },
+                ],
             })
         ),
         oneOf(is, isNoShortcut),
@@ -52,19 +58,19 @@ snippetRepository.add(
 //----------------------------------------------------------------------------------------------------------------------
 
 snippetRepository.add(
-    sequenceAll(
+    sequence(
         variableDeclaration,
-        optional(sequenceAll(colon, placeholderFragment())),
+        optional(sequence(colon, placeholderFragment())),
         oneOf(is, isNoShortcut),
         placeholderFragment()
     )
 );
 
 snippetRepository.add(
-    sequenceAll(
+    sequence(
         propertyDeclaration,
-        optional(sequenceAll(colon, placeholderFragment())),
-        optional(sequenceAll(is, placeholderFragment()))
+        optional(sequence(colon, placeholderFragment())),
+        optional(sequence(is, placeholderFragment()))
     ),
     [
         { ifId: "parameter|property", discardSnippet: true },
@@ -79,12 +85,7 @@ snippetRepository.add(
 //----------------------------------------------------------------------------------------------------------------------
 
 snippetRepository.add(
-    sequenceAll(
-        variableOrPropertyDeclaration,
-        colon,
-        oneOf(...types),
-        optional(sequenceAll(is, placeholderFragment()))
-    ),
+    sequence(variableOrPropertyDeclaration, colon, oneOf(...types), optional(sequence(is, placeholderFragment()))),
     [
         { removeShortcut: "ps" }, // conflicts with print-string
     ]
@@ -95,7 +96,7 @@ snippetRepository.add(
 //----------------------------------------------------------------------------------------------------------------------
 
 for (const [type, value] of scalarAndContainerTypesAndValues) {
-    snippetRepository.add(sequenceAll(variableOrPropertyDeclaration, colon, type, is, value));
+    snippetRepository.add(sequence(variableOrPropertyDeclaration, colon, type, is, value));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -104,7 +105,7 @@ for (const [type, value] of scalarAndContainerTypesAndValues) {
 
 for (const value of values) {
     snippetRepository.add(
-        sequenceAll(variableOrPropertyDeclaration, optional(sequenceAll(colon, placeholderFragment())), is, value),
+        sequence(variableOrPropertyDeclaration, optional(sequence(colon, placeholderFragment())), is, value),
         [
             { removeShortcut: "pis" }, // conflicts with print-interpolated-string
         ]
@@ -116,7 +117,7 @@ for (const value of values) {
 //----------------------------------------------------------------------------------------------------------------------
 
 for (const [type, value] of scalarAndContainerTypesAndValues) {
-    snippetRepository.add(sequenceAll(variableOrPropertyDeclaration, is, value, as, type));
+    snippetRepository.add(sequence(variableOrPropertyDeclaration, is, value, as, type));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -128,11 +129,11 @@ snippetRepository.add(
         // type
         oneOf(...scalarAndContainerTypes),
         // : type
-        sequenceAll(colon, oneOf(...types)),
+        sequence(colon, oneOf(...types)),
         // type =
-        sequenceAll(oneOf(...types), is),
+        sequence(oneOf(...types), is),
         // : type =
-        sequenceAll(colon, oneOf(...types), is)
+        sequence(colon, oneOf(...types), is)
     ),
     [
         { removeShortcut: "aae" }, // conflicts with async-arrow-expression
@@ -145,7 +146,7 @@ snippetRepository.add(
 //----------------------------------------------------------------------------------------------------------------------
 
 for (const [type, value] of scalarAndContainerTypesAndValues) {
-    snippetRepository.add(sequenceAll(optional(colon), type, is, value));
+    snippetRepository.add(sequence(optional(colon), type, is, value));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -153,7 +154,7 @@ for (const [type, value] of scalarAndContainerTypesAndValues) {
 //----------------------------------------------------------------------------------------------------------------------
 
 for (const value of values) {
-    snippetRepository.add(sequenceAll(optional(is), value), [
+    snippetRepository.add(sequence(optional(is), value), [
         { removeShortcut: "a" }, // conflicts with array
         { removeShortcut: "if" }, // conflicts with interface
         { removeShortcut: "it" }, // conflicts with it (test case)
@@ -167,7 +168,7 @@ for (const value of values) {
 //----------------------------------------------------------------------------------------------------------------------
 
 for (const [type, value] of scalarAndContainerTypesAndValues) {
-    snippetRepository.add(sequenceAll(optional(is), value, as, type));
+    snippetRepository.add(sequence(optional(is), value, as, type));
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -175,7 +176,7 @@ for (const [type, value] of scalarAndContainerTypesAndValues) {
 //----------------------------------------------------------------------------------------------------------------------
 
 for (const type of types) {
-    snippetRepository.add(sequenceAll(is, placeholderFragment(), as, type), [
+    snippetRepository.add(sequence(is, placeholderFragment(), as, type), [
         { removeShortcut: ["=aae", "iaae"] }, // conflicts with =-async-arrow-expression
         { removeShortcut: ["=aaf", "iaaf"] }, // conflicts with =-async-arrow-function
     ]);

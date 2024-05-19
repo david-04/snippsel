@@ -38,12 +38,12 @@ export class SnippetFragment {
     // Clone the snippet fragment with a different leadingSeparator
     //------------------------------------------------------------------------------------------------------------------
 
-    public withLeadingSeparator(leadingSeparator: string) {
-        return new SnippetFragment({ ...this, leadingSeparator });
+    public withLeadingSeparator(separator: string = " ") {
+        return new SnippetFragment({ ...this, leadingSeparator: separator });
     }
 
     public withoutLeadingSeparator() {
-        return new SnippetFragment({ ...this, leadingSeparator: "" });
+        return this.withLeadingSeparator("");
     }
 }
 
@@ -56,6 +56,17 @@ export class OneOfPermutation {
         readonly type: "one-of",
         readonly fragments: ReadonlyArray<PermutableSnippet>
     ) {}
+
+    public withLeadingSeparator(separator: string = " "): PermutableSnippet {
+        return new OneOfPermutation(
+            this.type,
+            this.fragments.map(fragment => fragment.withLeadingSeparator(separator))
+        );
+    }
+
+    public withoutLeadingSeparator() {
+        return this.withLeadingSeparator("");
+    }
 }
 
 export class OptionalPermutation {
@@ -63,6 +74,14 @@ export class OptionalPermutation {
         readonly type: "optional",
         readonly fragment: PermutableSnippet
     ) {}
+
+    public withLeadingSeparator(separator: string = " "): PermutableSnippet {
+        return new OptionalPermutation(this.type, this.fragment.withLeadingSeparator(separator));
+    }
+
+    public withoutLeadingSeparator() {
+        return this.withLeadingSeparator("");
+    }
 }
 
 export class SequenceAllPermutation {
@@ -70,6 +89,17 @@ export class SequenceAllPermutation {
         readonly type: "sequence-all",
         readonly fragments: ReadonlyArray<PermutableSnippet>
     ) {}
+
+    public withLeadingSeparator(separator: string = " "): PermutableSnippet {
+        return new SequenceAllPermutation(
+            this.type,
+            this.fragments.map((fragment, index) => (0 === index ? fragment.withLeadingSeparator(separator) : fragment))
+        );
+    }
+
+    public withoutLeadingSeparator() {
+        return this.withLeadingSeparator("");
+    }
 }
 
 export type PermutableSnippet = SnippetFragment | OptionalPermutation | SequenceAllPermutation | OneOfPermutation;
@@ -96,14 +126,29 @@ export function fragment(descriptor: {
     readonly languages: LanguageBuilder;
     readonly shortcuts: string | ReadonlyArray<string>;
     readonly voiceCommands: string | ReadonlyArray<string>;
-    readonly body: SnippetBody;
     readonly leadingSeparator?: string;
+    readonly body: SnippetBody;
+    readonly aliases?: ReadonlyArray<{
+        readonly id: string;
+        readonly languages?: LanguageBuilder;
+        readonly shortcuts: string | ReadonlyArray<string>;
+        readonly voiceCommands: string | ReadonlyArray<string>;
+    }>;
 }) {
-    return new SnippetFragment({
-        ...descriptor,
+    const fragment: ConstructorParameters<typeof SnippetFragment>[0] = {
+        id: descriptor.id,
         languages: descriptor.languages.toLanguages(),
+        shortcuts: descriptor.shortcuts,
+        voiceCommands: descriptor.voiceCommands,
         leadingSeparator: descriptor.leadingSeparator ?? " ",
-    });
+        body: descriptor.body,
+    };
+    const aliases = (descriptor.aliases ?? []).map(alias => ({
+        ...fragment,
+        ...alias,
+        languages: alias.languages?.toLanguages() ?? fragment.languages,
+    }));
+    return oneOf(...[fragment, ...aliases].map(fragmentDescriptor => new SnippetFragment(fragmentDescriptor)));
 }
 
 export function oneOf(...fragments: ReadonlyArray<PermutableSnippet>) {
@@ -118,6 +163,6 @@ export function optional(fragments: PermutableSnippet): OptionalPermutation {
     return new OptionalPermutation("optional", fragments);
 }
 
-export function sequenceAll(...fragments: ReadonlyArray<PermutableSnippet>): SequenceAllPermutation {
+export function sequence(...fragments: ReadonlyArray<PermutableSnippet>): SequenceAllPermutation {
     return new SequenceAllPermutation("sequence-all", fragments);
 }

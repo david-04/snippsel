@@ -1,7 +1,7 @@
 import { LANGUAGES } from "../../../../compiler/data/language.js";
 import { VARIABLE } from "../../../../compiler/data/placeholder.js";
 import { body } from "../../../../compiler/data/snippet-body.js";
-import { fragment, oneOf, sequenceAll } from "../../../../compiler/data/snippet-fragment.js";
+import { fragment, oneOf, sequence } from "../../../../compiler/data/snippet-fragment.js";
 import { FRAGMENT_ID } from "../../../constants/fragment-ids.js";
 import { or } from "./conjunctions.js";
 
@@ -40,9 +40,9 @@ export const scalarValues = [_undefined, _true, _false, zero, one, stringLiteral
 
 export const scalarTypesAndValues = [
     [_boolean, oneOf(_true, _false)],
-    [sequenceAll(_boolean, or, _undefined), oneOf(_true, _false, _undefined)],
+    [sequence(_boolean, or, _undefined), oneOf(_true, _false, _undefined)],
     [_number, oneOf(zero, one)],
-    [sequenceAll(_number, or, _undefined), oneOf(zero, one, _undefined)],
+    [sequence(_number, or, _undefined), oneOf(zero, one, _undefined)],
     [_string, stringLiteral],
-    [sequenceAll(_string, or, _undefined), oneOf(stringLiteral, _undefined)],
+    [sequence(_string, or, _undefined), oneOf(stringLiteral, _undefined)],
 ] as const;

@@ -1,7 +1,7 @@
 import { LANGUAGES } from "../../../../compiler/data/language.js";
 import { VARIABLE, placeholderFragment } from "../../../../compiler/data/placeholder.js";
 import { body } from "../../../../compiler/data/snippet-body.js";
-import { fragment, oneOf, sequenceAll } from "../../../../compiler/data/snippet-fragment.js";
+import { fragment, oneOf, sequence } from "../../../../compiler/data/snippet-fragment.js";
 import { FRAGMENT_ID } from "../../../constants/fragment-ids.js";
 import { _const, _let, propertyModifiers, variableModifiers } from "./modifiers.js";
 
@@ -9,7 +9,7 @@ import { _const, _let, propertyModifiers, variableModifiers } from "./modifiers.
 // [export] const|let
 //----------------------------------------------------------------------------------------------------------------------
 
-export const variableDeclaration = sequenceAll(variableModifiers, oneOf(_const, _let), placeholderFragment());
+export const variableDeclaration = sequence(variableModifiers, oneOf(_const, _let), placeholderFragment());
 
 //----------------------------------------------------------------------------------------------------------------------
 // #property
@@ -17,7 +17,7 @@ export const variableDeclaration = sequenceAll(variableModifiers, oneOf(_const, 
 //----------------------------------------------------------------------------------------------------------------------
 
 export const propertyDeclaration = oneOf(
-    sequenceAll(
+    sequence(
         fragment({ ...FRAGMENT_ID.private, languages: LANGUAGES.js.jsx, body: body.line("#") }),
         fragment({
             ...FRAGMENT_ID.property,
@@ -26,7 +26,7 @@ export const propertyDeclaration = oneOf(
             leadingSeparator: "",
         })
     ),
-    sequenceAll(
+    sequence(
         propertyModifiers,
         fragment({
             ...FRAGMENT_ID.parameterOrProperty,

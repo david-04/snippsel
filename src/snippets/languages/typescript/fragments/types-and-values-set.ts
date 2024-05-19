@@ -1,6 +1,6 @@
 import { LANGUAGES } from "../../../../compiler/data/language.js";
 import { body } from "../../../../compiler/data/snippet-body.js";
-import { fragment, oneOf, sequenceAll } from "../../../../compiler/data/snippet-fragment.js";
+import { fragment, oneOf, sequence } from "../../../../compiler/data/snippet-fragment.js";
 import { FRAGMENT_ID } from "../../../constants/fragment-ids.js";
 import { brackets, typeAnnotation } from "./conjunctions.js";
 import { typePlaceholder } from "./placeholders.js";
@@ -32,21 +32,19 @@ const newSet = fragment({
 
 export const setTypes = [
     // Set<_>
-    sequenceAll(set, typeAnnotation["<"], typePlaceholder, typeAnnotation[">"]),
+    sequence(set, typeAnnotation["<"], typePlaceholder, typeAnnotation[">"]),
     // ReadonlySet<_>
-    sequenceAll(
+    sequence(
         readonlySet,
         oneOf(typeAnnotation["<"], typeAnnotation["< (no shortcut)"]),
         typePlaceholder.withoutLeadingSeparator(),
         typeAnnotation[">"]
     ),
     // Set<boolean|number|string>
-    ...scalarTypes.map(type =>
-        sequenceAll(set, typeAnnotation["<"], type.withoutLeadingSeparator(), typeAnnotation[">"])
-    ),
+    ...scalarTypes.map(type => sequence(set, typeAnnotation["<"], type.withoutLeadingSeparator(), typeAnnotation[">"])),
     // ReadonlySet<boolean|number|string>
     ...scalarTypes.map(type =>
-        sequenceAll(readonlySet, typeAnnotation["<"], type.withoutLeadingSeparator(), typeAnnotation[">"])
+        sequence(readonlySet, typeAnnotation["<"], type.withoutLeadingSeparator(), typeAnnotation[">"])
     ),
 ] as const;
 
@@ -56,7 +54,7 @@ export const setTypes = [
 
 export const setValues = [
     // new Set<_>()
-    sequenceAll(
+    sequence(
         newSet,
         oneOf(typeAnnotation["<"], typeAnnotation["< (no shortcut)"]),
         typePlaceholder.withoutLeadingSeparator(),
@@ -65,7 +63,7 @@ export const setValues = [
     ),
     // new Set<boolean|number|string>()
     ...scalarTypes.map(type =>
-        sequenceAll(newSet, typeAnnotation["<"], type.withoutLeadingSeparator(), typeAnnotation[">"], brackets)
+        sequence(newSet, typeAnnotation["<"], type.withoutLeadingSeparator(), typeAnnotation[">"], brackets)
     ),
 ] as const;
 
@@ -77,27 +75,21 @@ export const setTypesAndValues = [
     [
         oneOf(...setTypes),
         // new Set()
-        sequenceAll(newSet, brackets),
+        sequence(newSet, brackets),
     ],
     [
         // ReadonlySet<_>
-        sequenceAll(readonlySet, typeAnnotation["<"], typePlaceholder.withoutLeadingSeparator(), typeAnnotation[">"]),
+        sequence(readonlySet, typeAnnotation["<"], typePlaceholder.withoutLeadingSeparator(), typeAnnotation[">"]),
         // new Set<_>()
-        sequenceAll(
-            newSet,
-            typeAnnotation["<"],
-            typePlaceholder.withoutLeadingSeparator(),
-            typeAnnotation[">"],
-            brackets
-        ),
+        sequence(newSet, typeAnnotation["<"], typePlaceholder.withoutLeadingSeparator(), typeAnnotation[">"], brackets),
     ],
     ...scalarTypes.map(
         type =>
             [
                 // ReadonlySet<boolean|number|string>
-                sequenceAll(readonlySet, typeAnnotation["<"], type.withoutLeadingSeparator(), typeAnnotation[">"]),
+                sequence(readonlySet, typeAnnotation["<"], type.withoutLeadingSeparator(), typeAnnotation[">"]),
                 // new Set<boolean|number|string>()
-                sequenceAll(newSet, typeAnnotation["<"], type.withoutLeadingSeparator(), typeAnnotation[">"], brackets),
+                sequence(newSet, typeAnnotation["<"], type.withoutLeadingSeparator(), typeAnnotation[">"], brackets),
             ] as const
     ),
 ] as const;

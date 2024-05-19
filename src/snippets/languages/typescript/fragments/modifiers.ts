@@ -1,6 +1,6 @@
 import { LANGUAGES } from "../../../../compiler/data/language.js";
 import { body } from "../../../../compiler/data/snippet-body.js";
-import { fragment, oneOf, optional, sequenceAll } from "../../../../compiler/data/snippet-fragment.js";
+import { fragment, oneOf, optional, sequence } from "../../../../compiler/data/snippet-fragment.js";
 import { FRAGMENT_ID } from "../../../constants/fragment-ids.js";
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -26,16 +26,16 @@ export const _let = fragment({ ...FRAGMENT_ID.let, languages: LANGUAGES.js.jsx.t
 // Combined optional modifiers
 //----------------------------------------------------------------------------------------------------------------------
 
-export const classModifiers = sequenceAll(optional(_export), optional(_abstract));
+export const classModifiers = sequence(optional(_export), optional(_abstract));
 export const interfaceModifiers = optional(_export);
 export const enumModifiers = optional(_export);
 export const namespaceModifiers = optional(_export);
 
-export const functionModifiers = sequenceAll(optional(_export), optional(_async));
+export const functionModifiers = sequence(optional(_export), optional(_async));
 export const arrowFunctionModifiers = optional(_async);
-export const methodModifiers = sequenceAll(optional(publicProtectedPrivate), optional(_static), optional(_async));
+export const methodModifiers = sequence(optional(publicProtectedPrivate), optional(_static), optional(_async));
 export const constructorModifiers = optional(publicProtectedPrivate);
 
 export const variableModifiers = optional(_export);
-export const propertyModifiers = sequenceAll(optional(publicProtectedPrivate), optional(_static), optional(_readonly));
+export const propertyModifiers = sequence(optional(publicProtectedPrivate), optional(_static), optional(_readonly));
 export const typeModifiers = optional(_export);

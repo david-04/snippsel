@@ -1,5 +1,5 @@
 import { LANGUAGES } from "../../../../compiler/data/language.js";
-import { fragment, oneOf, optional, sequenceAll } from "../../../../compiler/data/snippet-fragment.js";
+import { fragment, oneOf, optional, sequence } from "../../../../compiler/data/snippet-fragment.js";
 import { FRAGMENT_ID } from "../../../constants/fragment-ids.js";
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -15,9 +15,9 @@ export const _static = fragment({ languages: LANGUAGES.java, ...FRAGMENT_ID.stat
 export const _final = fragment({ languages: LANGUAGES.java, ...FRAGMENT_ID.final });
 export const _abstract = fragment({ languages: LANGUAGES.java, ...FRAGMENT_ID.abstract });
 
-export const publicStaticFinal = sequenceAll(optional(publicProtectedPrivate), optional(_static), optional(_final));
+export const publicStaticFinal = sequence(optional(publicProtectedPrivate), optional(_static), optional(_final));
 
 export const publicStaticFinalAbstract = oneOf(
     publicStaticFinal,
-    sequenceAll(optional(publicProtectedPrivate), _abstract)
+    sequence(optional(publicProtectedPrivate), _abstract)
 );

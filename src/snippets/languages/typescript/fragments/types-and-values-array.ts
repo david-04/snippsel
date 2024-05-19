@@ -1,7 +1,7 @@
 import { LANGUAGES } from "../../../../compiler/data/language.js";
 import { VARIABLE } from "../../../../compiler/data/placeholder.js";
 import { body } from "../../../../compiler/data/snippet-body.js";
-import { fragment, oneOf, sequenceAll } from "../../../../compiler/data/snippet-fragment.js";
+import { fragment, oneOf, sequence } from "../../../../compiler/data/snippet-fragment.js";
 import { FRAGMENT_ID } from "../../../constants/fragment-ids.js";
 import { as, brackets, typeAnnotation } from "./conjunctions.js";
 import { _const } from "./modifiers.js";
@@ -40,9 +40,9 @@ const emptyArray = fragment({
 
 export const arrayTypes = [
     // Array<_>
-    sequenceAll(array, typeAnnotation["<"], typePlaceholder.withoutLeadingSeparator(), typeAnnotation[">"]),
+    sequence(array, typeAnnotation["<"], typePlaceholder.withoutLeadingSeparator(), typeAnnotation[">"]),
     // ReadonlyArray<_>
-    sequenceAll(
+    sequence(
         readonlyArray,
         oneOf(typeAnnotation["<"], typeAnnotation["< (no shortcut)"]),
         typePlaceholder.withoutLeadingSeparator(),
@@ -50,11 +50,11 @@ export const arrayTypes = [
     ),
     // Array<boolean|number|string>
     ...scalarTypes.map(type =>
-        sequenceAll(array, typeAnnotation["<"], type.withoutLeadingSeparator(), typeAnnotation[">"])
+        sequence(array, typeAnnotation["<"], type.withoutLeadingSeparator(), typeAnnotation[">"])
     ),
     // ReadonlyArray<boolean|number|string>
     ...scalarTypes.map(type =>
-        sequenceAll(readonlyArray, typeAnnotation["<"], type.withoutLeadingSeparator(), typeAnnotation[">"])
+        sequence(readonlyArray, typeAnnotation["<"], type.withoutLeadingSeparator(), typeAnnotation[">"])
     ),
 ] as const;
 
@@ -66,9 +66,9 @@ export const arrayValues = [
     // []
     emptyArray,
     // [] as const
-    sequenceAll(emptyArray, as, _const),
+    sequence(emptyArray, as, _const),
     // new Array<_>()
-    sequenceAll(
+    sequence(
         newArray,
         oneOf(typeAnnotation["<"], typeAnnotation["< (no shortcut)"]),
         typePlaceholder.withoutLeadingSeparator(),
@@ -77,7 +77,7 @@ export const arrayValues = [
     ),
     // new Array<boolean|number|string>()
     ...scalarTypes.map(type =>
-        sequenceAll(newArray, typeAnnotation["<"], type.withoutLeadingSeparator(), typeAnnotation[">"], brackets)
+        sequence(newArray, typeAnnotation["<"], type.withoutLeadingSeparator(), typeAnnotation[">"], brackets)
     ),
 ] as const;
 
@@ -92,28 +92,22 @@ export const arrayTypesAndValues = [
             // []
             emptyArray,
             // new Array()
-            sequenceAll(newArray, brackets)
+            sequence(newArray, brackets)
         ),
     ],
     [
         // ReadonlyArray<_>
-        sequenceAll(readonlyArray, typeAnnotation["<"], typePlaceholder, typeAnnotation[">"]),
+        sequence(readonlyArray, typeAnnotation["<"], typePlaceholder, typeAnnotation[">"]),
         // new Array<_>()
-        sequenceAll(newArray, typeAnnotation["<"], typePlaceholder, typeAnnotation[">"], brackets),
+        sequence(newArray, typeAnnotation["<"], typePlaceholder, typeAnnotation[">"], brackets),
     ],
     ...scalarTypes.map(
         type =>
             [
                 // ReadonlyArray<boolean|number|string>
-                sequenceAll(readonlyArray, typeAnnotation["<"], type.withoutLeadingSeparator(), typeAnnotation[">"]),
+                sequence(readonlyArray, typeAnnotation["<"], type.withoutLeadingSeparator(), typeAnnotation[">"]),
                 // new Array<boolean|number|string>()
-                sequenceAll(
-                    newArray,
-                    typeAnnotation["<"],
-                    type.withoutLeadingSeparator(),
-                    typeAnnotation[">"],
-                    brackets
-                ),
+                sequence(newArray, typeAnnotation["<"], type.withoutLeadingSeparator(), typeAnnotation[">"], brackets),
             ] as const
     ),
 ] as const;
