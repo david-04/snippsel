@@ -4,8 +4,14 @@ import { body } from "../../../compiler/data/snippet-body.js";
 import { explicitOrImplied, fragment, oneOf, optional, sequence } from "../../../compiler/data/snippet-fragment.js";
 import { snippetRepository } from "../../../compiler/data/snippet-repository.js";
 import { as, colon, is } from "./fragments/conjunctions.js";
+import { _satisfies, asConst, asConstSatisfies } from "./fragments/inference-hints.js";
 import { _export } from "./fragments/modifiers.js";
-import { scalarAndContainerTypesAndValues, types, values } from "./fragments/types-and-values.js";
+import {
+    arrowFunctionAndContainerValues,
+    scalarAndContainerTypesAndValues,
+    types,
+    values,
+} from "./fragments/types-and-values.js";
 import {
     propertyDeclaration,
     variableDeclaration,
@@ -126,3 +132,22 @@ for (const [type, value] of scalarAndContainerTypesAndValues) {
         { removeShortcut: "isas" }, //          "private-static-as-string" wins over "is-string-as-string"
     ]);
 }
+
+//----------------------------------------------------------------------------------------------------------------------
+// value
+//----------------------------------------------------------------------------------------------------------------------
+
+for (const value of arrowFunctionAndContainerValues) {
+    snippetRepository.add(value, [
+        { removeLeadingPlaceholder: true },
+        { ifId: "empty-array", removeShortcut: "a" }, // "array" and "empty-array" have the same shortcut
+        { removeShortcut: "aae" }, //           "async-arrow-expression" wins over "as-arrow-expression"
+        { removeShortcut: "aaf" }, //           "async-arrow-function" wins over "as-arrow-function"
+    ]);
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+// [as const] [satisfies _]
+//----------------------------------------------------------------------------------------------------------------------
+
+snippetRepository.add(oneOf(asConst, asConstSatisfies, _satisfies));

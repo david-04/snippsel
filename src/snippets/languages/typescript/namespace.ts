@@ -23,6 +23,6 @@ snippetRepository.add(
         })
     ),
     [
-        { removeShortcut: "ns" }, // conflicts with new Set
+        { removeShortcut: "ns" }, // "new-set" wins over "namespace"
     ]
 );
