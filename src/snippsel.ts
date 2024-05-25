@@ -13,6 +13,7 @@ for (const file of readdirSync("build/snippets", { recursive: true }).map(file =
         await import(`./snippets/${file}`);
     }
 }
+
 createVSCodeSnippets();
 createTalonFiles();
 createReports();

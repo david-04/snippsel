@@ -7,8 +7,13 @@ import { body } from "./snippet-body.js";
 import { PermutableSnippet, fragment } from "./snippet-fragment.js";
 
 export class CursorPlaceholder {
-    private constructor() {}
     static readonly INSTANCE = new CursorPlaceholder();
+
+    private constructor() {}
+
+    hasPreset() {
+        return false;
+    }
 
     toVSCode() {
         return "$0";
@@ -20,8 +25,13 @@ export class CursorPlaceholder {
 //----------------------------------------------------------------------------------------------------------------------
 
 export class SelectedTextPlaceholder {
-    private constructor() {}
     static readonly INSTANCE = new SelectedTextPlaceholder();
+
+    private constructor() {}
+
+    hasPreset() {
+        return false;
+    }
 
     toVSCode() {
         return "$TM_SELECTED_TEXT";
@@ -49,6 +59,10 @@ export class VariablePlaceholder {
         return new VariablePlaceholder(this.index, concatenatedText);
     }
 
+    hasPreset() {
+        return !!this.presetValue?.trim();
+    }
+
     toVSCode() {
         return this.presetValue ? `\${${this.index}:${this.presetValue ?? ""}}` : `\$${this.index}`;
     }
@@ -67,23 +81,6 @@ export type Placeholder = CursorPlaceholder | SelectedTextPlaceholder | Variable
 export const CURSOR = CursorPlaceholder.INSTANCE;
 export const SELECTED_TEXT = SelectedTextPlaceholder.INSTANCE;
 export const VARIABLE = (index: number, presetValue?: string) => new VariablePlaceholder(index, presetValue);
-
-// export function placeholderFragment(): PermutableSnippet;
-// export function placeholderFragment(index: number, presetValue?: string): PermutableSnippet;
-// export function placeholderFragment(presetValue: string): PermutableSnippet;
-// export function placeholderFragment(indexOrPresetValue?: number | string, presetValue?: string): PermutableSnippet {
-//     const placeholder = VARIABLE(
-//         "number" === typeof indexOrPresetValue ? indexOrPresetValue : 1,
-//         "string" === typeof indexOrPresetValue ? indexOrPresetValue : presetValue
-//     );
-//     return fragment({
-//         id: "",
-//         languages: LANGUAGES.all,
-//         shortcuts: "",
-//         voiceCommands: "",
-//         body: body.line(placeholder),
-//     });
-// }
 
 export function placeholder(): PermutableSnippet;
 export function placeholder(index: number, presetValue?: string): PermutableSnippet;

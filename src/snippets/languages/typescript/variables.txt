@@ -1,9 +1,0 @@
-.ifLanguage()
-.ifId(string | regexp)
-.removeShortcut
-.removeVoiceCommands
-.removeSnippet
-
-[
-    {ifLanguage: }
-]

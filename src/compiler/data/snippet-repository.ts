@@ -1,8 +1,8 @@
 import { createPermutations } from "../utils/snippet-permutator.js";
+import { PostProcessingRule } from "../utils/snippet-post-processor.js";
 import { LanguageBuilder, VSCODE_LANGUAGE_ID_TO_LANGUAGE_ID, VSCodeLanguageId } from "./language.js";
 import { SnippetBody } from "./snippet-body.js";
 import { OneOfPermutation, OptionalPermutation, PermutableSnippet, SequencePermutation } from "./snippet-fragment.js";
-import { SnippetPostProcessingRule } from "./snippet-post-processor.js";
 import { Snippet } from "./snippet.js";
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -32,17 +32,11 @@ export class SnippetRepository {
 
     public add(languages: LanguageBuilder, ...snippets: SnippetWithOptionalLanguages[]): void;
     public add(...snippets: SnippetWithMandatoryLanguages[]): void;
-    public add(
-        permutableSnippet: PermutableSnippet,
-        postProcessingRules?: ReadonlyArray<SnippetPostProcessingRule>
-    ): void;
+    public add(permutableSnippet: PermutableSnippet, postProcessingRules?: ReadonlyArray<PostProcessingRule>): void;
     public add(
         param1: LanguageBuilder | SnippetWithMandatoryLanguages | PermutableSnippet,
         ...params: ReadonlyArray<
-            | SnippetWithOptionalLanguages
-            | SnippetWithMandatoryLanguages
-            | ReadonlyArray<SnippetPostProcessingRule>
-            | undefined
+            SnippetWithOptionalLanguages | SnippetWithMandatoryLanguages | ReadonlyArray<PostProcessingRule> | undefined
         >
     ) {
         if (param1 instanceof LanguageBuilder) {
@@ -53,7 +47,7 @@ export class SnippetRepository {
             param1 instanceof OptionalPermutation ||
             "leadingSeparator" in param1
         ) {
-            this.addPermutations(param1, params[0] as ReadonlyArray<SnippetPostProcessingRule> | undefined);
+            this.addPermutations(param1, params[0] as ReadonlyArray<PostProcessingRule> | undefined);
         } else {
             this.addWithDefaultLanguage(param1.languages, [
                 param1,
@@ -74,7 +68,7 @@ export class SnippetRepository {
 
     private addPermutations(
         permutableSnippet: PermutableSnippet,
-        postProcessingRules: ReadonlyArray<SnippetPostProcessingRule> | undefined
+        postProcessingRules: ReadonlyArray<PostProcessingRule> | undefined
     ) {
         createPermutations({
             fragments: permutableSnippet,

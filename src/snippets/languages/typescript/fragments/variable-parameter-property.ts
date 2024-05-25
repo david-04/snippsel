@@ -6,15 +6,13 @@ import { FRAGMENT_ID } from "../../../constants/fragment-ids.js";
 import { _const, _let, propertyModifiers, variableModifiers } from "./modifiers.js";
 
 //----------------------------------------------------------------------------------------------------------------------
-// [export] const
-// [export] let
+// [export] const|let
 //----------------------------------------------------------------------------------------------------------------------
 
 export const variableDeclaration = sequence(variableModifiers, oneOf(_const, _let), placeholder());
 
 //----------------------------------------------------------------------------------------------------------------------
 // #[property]
-// [public|private|protected] [static] [readonly] [property]
 //----------------------------------------------------------------------------------------------------------------------
 
 const propertyDeclarationJs = sequence(
@@ -29,6 +27,10 @@ const propertyDeclarationJs = sequence(
     )
 );
 
+//----------------------------------------------------------------------------------------------------------------------
+// [public|private|protected] [static] [readonly] [property]
+//----------------------------------------------------------------------------------------------------------------------
+
 const propertyDeclarationTs = sequence(
     propertyModifiers,
     explicitOrImplied(
@@ -40,10 +42,9 @@ const propertyDeclarationTs = sequence(
     )
 );
 
-export const propertyDeclaration = oneOf(propertyDeclarationJs, propertyDeclarationTs);
-
 //----------------------------------------------------------------------------------------------------------------------
 // Any variable, parameter or property
 //----------------------------------------------------------------------------------------------------------------------
 
+export const propertyDeclaration = oneOf(propertyDeclarationJs, propertyDeclarationTs);
 export const variableOrPropertyDeclaration = oneOf(variableDeclaration, propertyDeclaration);

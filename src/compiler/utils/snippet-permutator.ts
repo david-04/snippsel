@@ -8,8 +8,8 @@ import {
     SequencePermutation,
     SnippetFragment,
 } from "../data/snippet-fragment.js";
-import { SnippetMetadata, SnippetPostProcessingRule, postProcessSnippet } from "../data/snippet-post-processor.js";
 import { Snippet } from "../data/snippet.js";
+import { PostProcessingRule, postProcessSnippet } from "./snippet-post-processor.js";
 
 //----------------------------------------------------------------------------------------------------------------------
 // Data types
@@ -19,7 +19,7 @@ type Permutation = ReadonlyArray<SnippetFragment>;
 type PermutationResult = ReadonlyArray<Permutation>;
 
 export type PermutationOperations = {
-    postProcessingRules: ReadonlyArray<SnippetPostProcessingRule>;
+    postProcessingRules: ReadonlyArray<PostProcessingRule>;
     save: (snippet: Snippet) => void;
 };
 
@@ -94,25 +94,17 @@ function getSharedLanguages(permutation: Permutation) {
 function assembleSnippet(
     permutation: Permutation,
     language: LanguageId,
-    postProcessingRules: ReadonlyArray<SnippetPostProcessingRule>
+    postProcessingRules: ReadonlyArray<PostProcessingRule>
 ) {
-    const originalSnippetMetadata: SnippetMetadata = {
+    const postProcessedSnippetMetadata = postProcessSnippet(postProcessingRules, {
         id: assembleId(permutation),
         language,
         shortcuts: assembleShortcuts(permutation),
         voiceCommands: assembleVoiceCommands(permutation),
-    };
-    const postProcessedSnippetMetadata = postProcessSnippet(originalSnippetMetadata, postProcessingRules);
-    if (postProcessedSnippetMetadata) {
-        return new Snippet({
-            id: postProcessedSnippetMetadata.id,
-            languages: new LanguageBuilder(new Set(), language).toLanguages(),
-            shortcuts: postProcessedSnippetMetadata.shortcuts,
-            voiceCommands: postProcessedSnippetMetadata.voiceCommands,
-            body: assembleBody(permutation),
-        });
-    }
-    return undefined;
+        body: assembleBody(permutation),
+    });
+    const languages = new LanguageBuilder(new Set(), language).toLanguages();
+    return postProcessedSnippetMetadata && new Snippet({ ...postProcessedSnippetMetadata, languages });
 }
 
 function assembleId(permutation: Permutation) {
