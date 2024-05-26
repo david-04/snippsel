@@ -2,7 +2,7 @@ import { createPermutations } from "../utils/snippet-permutator.js";
 import { PostProcessingRule } from "../utils/snippet-post-processor.js";
 import { LanguageBuilder, VSCODE_LANGUAGE_ID_TO_LANGUAGE_ID, VSCodeLanguageId } from "./language.js";
 import { SnippetBody } from "./snippet-body.js";
-import { OneOfPermutation, OptionalPermutation, PermutableSnippet, SequencePermutation } from "./snippet-fragment.js";
+import { PermutableSnippet } from "./snippet-fragment.js";
 import { Snippet } from "./snippet.js";
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -30,67 +30,35 @@ export class SnippetRepository {
     // Add snippets
     //------------------------------------------------------------------------------------------------------------------
 
-    public add(languages: LanguageBuilder, ...snippets: SnippetWithOptionalLanguages[]): void;
-    public add(...snippets: SnippetWithMandatoryLanguages[]): void;
-    public add(permutableSnippet: PermutableSnippet, postProcessingRules?: ReadonlyArray<PostProcessingRule>): void;
-    public add(
-        param1: LanguageBuilder | SnippetWithMandatoryLanguages | PermutableSnippet,
-        ...params: ReadonlyArray<
-            SnippetWithOptionalLanguages | SnippetWithMandatoryLanguages | ReadonlyArray<PostProcessingRule> | undefined
-        >
-    ) {
-        if (param1 instanceof LanguageBuilder) {
-            this.addWithDefaultLanguage(param1, params as ReadonlyArray<SnippetWithOptionalLanguages>);
-        } else if (
-            param1 instanceof OneOfPermutation ||
-            param1 instanceof SequencePermutation ||
-            param1 instanceof OptionalPermutation ||
-            "leadingSeparator" in param1
-        ) {
-            this.addPermutations(param1, params[0] as ReadonlyArray<PostProcessingRule> | undefined);
-        } else {
-            this.addWithDefaultLanguage(param1.languages, [
-                param1,
-                ...(params as ReadonlyArray<SnippetWithMandatoryLanguages>),
-            ]);
-        }
-        return this;
+    public addSnippet(snippet: SnippetWithMandatoryLanguages) {
+        this.validateAndSave(
+            new Snippet({
+                id: snippet.id,
+                languages: snippet.languages.toLanguages(),
+                shortcuts: SnippetRepository.normalizeShortcutsOrVoiceCommands(snippet.shortcuts),
+                voiceCommands: SnippetRepository.normalizeShortcutsOrVoiceCommands(snippet.voiceCommands),
+                body: snippet.body,
+            })
+        );
     }
 
-    private addWithDefaultLanguage(languages: LanguageBuilder, snippets: ReadonlyArray<SnippetWithOptionalLanguages>) {
-        snippets
-            .map(snippet => SnippetRepository.toSnippet(languages, snippet))
-            .forEach(snippet => {
-                this.snippets.forEach(existingSnippet => existingSnippet.assertNoConflict(snippet));
-                this.snippets.push(snippet);
-            });
-    }
-
-    private addPermutations(
+    public addPermutations(
         permutableSnippet: PermutableSnippet,
         postProcessingRules: ReadonlyArray<PostProcessingRule> | undefined
     ) {
         createPermutations({
             fragments: permutableSnippet,
             postProcessingRules: postProcessingRules ?? [],
-            save: snippet => {
-                this.snippets.forEach(existingSnippet => existingSnippet.assertNoConflict(snippet));
-                this.snippets.push(snippet);
-            },
+            save: snippet => this.validateAndSave(snippet),
         });
     }
 
-    private static toSnippet(languages: LanguageBuilder, snippet: SnippetWithOptionalLanguages) {
-        return new Snippet({
-            id: snippet.id,
-            languages: (snippet.languages ?? languages).toLanguages(),
-            shortcuts: this.splitString(snippet.shortcuts),
-            voiceCommands: this.splitString(snippet.voiceCommands),
-            body: snippet.body,
-        });
+    private validateAndSave(snippet: Snippet) {
+        this.snippets.forEach(existingSnippet => existingSnippet.assertNoConflict(snippet));
+        this.snippets.push(snippet);
     }
 
-    public static splitString(stringOrArray: string | ReadonlyArray<string>) {
+    public static normalizeShortcutsOrVoiceCommands(stringOrArray: string | ReadonlyArray<string>) {
         return "string" === typeof stringOrArray ? stringOrArray.split(",") : stringOrArray;
     }
 

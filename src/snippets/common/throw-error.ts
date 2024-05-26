@@ -1,7 +1,7 @@
+import { addSnippets } from "../../compiler/api.js";
 import { LANGUAGES } from "../../compiler/data/language.js";
 import { CURSOR, SELECTED_TEXT, VARIABLE } from "../../compiler/data/placeholder.js";
 import { body } from "../../compiler/data/snippet-body.js";
-import { snippetRepository } from "../../compiler/data/snippet-repository.js";
 
 const THROW_ERROR = {
     id: "throw-error",
@@ -22,7 +22,7 @@ const THROW_ERROR = {
 // AutoHotkey
 //----------------------------------------------------------------------------------------------------------------------
 
-snippetRepository.add({
+addSnippets({
     ...THROW_ERROR,
     languages: LANGUAGES.ahk,
     body: body.line('throw Error("', SELECTED_TEXT, CURSOR, '")'),
@@ -32,7 +32,7 @@ snippetRepository.add({
 // C++, Java, JavaScript, TypeScript
 //----------------------------------------------------------------------------------------------------------------------
 
-snippetRepository.add({
+addSnippets({
     ...THROW_ERROR,
     languages: LANGUAGES.cpp.java.js.jsx.ts.tsx,
     body: body.line("throw new ", VARIABLE(1, "Error"), '("', SELECTED_TEXT, CURSOR, '")'),
@@ -42,7 +42,7 @@ snippetRepository.add({
 // Make
 //----------------------------------------------------------------------------------------------------------------------
 
-snippetRepository.add({
+addSnippets({
     ...THROW_ERROR,
     languages: LANGUAGES.make,
     body: body.line("$(error ", SELECTED_TEXT, CURSOR, ")"),
@@ -52,7 +52,7 @@ snippetRepository.add({
 // Ruby
 //----------------------------------------------------------------------------------------------------------------------
 
-snippetRepository.add({
+addSnippets({
     ...THROW_ERROR,
     languages: LANGUAGES.rb,
     body: body.line("raise ", VARIABLE(1, "StandardError"), ', "', SELECTED_TEXT, CURSOR, '"'),

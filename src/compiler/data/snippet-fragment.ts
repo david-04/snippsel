@@ -28,8 +28,8 @@ export class SnippetFragment {
     }) {
         this.id = descriptor.id;
         this.languages = descriptor.languages;
-        this.shortcuts = SnippetRepository.splitString(descriptor.shortcuts);
-        this.voiceCommands = SnippetRepository.splitString(descriptor.voiceCommands);
+        this.shortcuts = SnippetRepository.normalizeShortcutsOrVoiceCommands(descriptor.shortcuts);
+        this.voiceCommands = SnippetRepository.normalizeShortcutsOrVoiceCommands(descriptor.voiceCommands);
         this.body = descriptor.body;
         this.leadingSeparator = descriptor.leadingSeparator;
     }

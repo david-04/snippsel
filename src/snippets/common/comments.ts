@@ -1,7 +1,7 @@
+import { addSnippets } from "../../compiler/api.js";
 import { LANGUAGES } from "../../compiler/data/language.js";
 import { CURSOR, SELECTED_TEXT } from "../../compiler/data/placeholder.js";
 import { body } from "../../compiler/data/snippet-body.js";
-import { snippetRepository } from "../../compiler/data/snippet-repository.js";
 
 const COMMENT_BLOCK = { id: "comment-block", shortcuts: "/", voiceCommands: "comment block" } as const;
 
@@ -13,7 +13,7 @@ function dashes(length: number) {
 // Comment block
 //----------------------------------------------------------------------------------------------------------------------
 
-snippetRepository.add(
+addSnippets(
     {
         ...COMMENT_BLOCK,
         languages: LANGUAGES.ahk,
@@ -45,7 +45,7 @@ snippetRepository.add(
 // JavaDoc
 //----------------------------------------------------------------------------------------------------------------------
 
-snippetRepository.add(LANGUAGES.java.js.jsx.ts.tsx, {
+addSnippets(LANGUAGES.java.js.jsx.ts.tsx, {
     id: "javadoc",
     shortcuts: "jd",
     voiceCommands: "javadoc",

@@ -1,7 +1,7 @@
+import { addSnippets } from "../../compiler/api.js";
 import { LANGUAGES } from "../../compiler/data/language.js";
 import { CURSOR, SELECTED_TEXT, VARIABLE } from "../../compiler/data/placeholder.js";
 import { body } from "../../compiler/data/snippet-body.js";
-import { snippetRepository } from "../../compiler/data/snippet-repository.js";
 
 const FOR_EACH = { id: "for-each", shortcuts: "fe", voiceCommands: "for each" } as const;
 const FOR_EACH_INDEX = { id: "for-each-index", shortcuts: "fei", voiceCommands: "for each index" } as const;
@@ -12,7 +12,7 @@ const FOR_EACH_VALUE = { id: "for-each-value", shortcuts: "fev", voiceCommands: 
 // AutoHotKey
 //----------------------------------------------------------------------------------------------------------------------
 
-snippetRepository.add(
+addSnippets(
     LANGUAGES.ahk,
     {
         ...FOR_EACH,
@@ -48,7 +48,7 @@ snippetRepository.add(
 // AWK
 //----------------------------------------------------------------------------------------------------------------------
 
-snippetRepository.add(
+addSnippets(
     LANGUAGES.awk,
     {
         ...FOR_EACH,
@@ -96,7 +96,7 @@ snippetRepository.add(
 // C + C++
 //----------------------------------------------------------------------------------------------------------------------
 
-snippetRepository.add(
+addSnippets(
     LANGUAGES.c.cpp,
     {
         ...FOR_EACH,
@@ -144,7 +144,7 @@ snippetRepository.add(
 // Java
 //----------------------------------------------------------------------------------------------------------------------
 
-snippetRepository.add(
+addSnippets(
     LANGUAGES.java,
     {
         ...FOR_EACH,
@@ -192,7 +192,7 @@ snippetRepository.add(
 // JavaScript + TypeScript
 //----------------------------------------------------------------------------------------------------------------------
 
-snippetRepository.add(
+addSnippets(
     LANGUAGES.js.jsx.ts.tsx,
     {
         ...FOR_EACH,
@@ -240,7 +240,7 @@ snippetRepository.add(
 // Make
 //----------------------------------------------------------------------------------------------------------------------
 
-snippetRepository.add(
+addSnippets(
     LANGUAGES.make,
     {
         ...FOR_EACH,
@@ -264,7 +264,7 @@ snippetRepository.add(
 // Ruby
 //----------------------------------------------------------------------------------------------------------------------
 
-snippetRepository.add(
+addSnippets(
     LANGUAGES.rb,
     {
         ...FOR_EACH,
@@ -300,7 +300,7 @@ snippetRepository.add(
 // Shell
 //----------------------------------------------------------------------------------------------------------------------
 
-snippetRepository.add(
+addSnippets(
     LANGUAGES.sh,
     {
         ...FOR_EACH,

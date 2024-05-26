@@ -1,8 +1,8 @@
+import { addSnippets } from "../../../compiler/api.js";
 import { LANGUAGES } from "../../../compiler/data/language.js";
 import { VARIABLE, placeholder } from "../../../compiler/data/placeholder.js";
 import { body } from "../../../compiler/data/snippet-body.js";
 import { explicitOrImplied, fragment, oneOf, optional, sequence } from "../../../compiler/data/snippet-fragment.js";
-import { snippetRepository } from "../../../compiler/data/snippet-repository.js";
 import { as, colon, is } from "./fragments/conjunctions.js";
 import { _satisfies, asConst, asConstSatisfies } from "./fragments/inference-hints.js";
 import { _export } from "./fragments/modifiers.js";
@@ -22,7 +22,7 @@ import {
 // [export] type _ = _
 //----------------------------------------------------------------------------------------------------------------------
 
-snippetRepository.add(
+addSnippets(
     sequence(
         optional(_export),
         fragment({
@@ -41,7 +41,7 @@ snippetRepository.add(
 // [export] type _<_> = _
 //----------------------------------------------------------------------------------------------------------------------
 
-snippetRepository.add(
+addSnippets(
     sequence(
         optional(_export),
         fragment({
@@ -64,7 +64,7 @@ snippetRepository.add(
 // [variable|property _] [: _] [= _]
 //----------------------------------------------------------------------------------------------------------------------
 
-snippetRepository.add(
+addSnippets(
     oneOf(
         sequence(variableDeclaration, optional(sequence(colon, placeholder())), explicitOrImplied(is), placeholder()),
         sequence(propertyDeclaration, optional(sequence(colon, placeholder())), optional(sequence(is, placeholder())))
@@ -86,40 +86,33 @@ snippetRepository.add(
 // [variable|property _] : type [= _]
 //----------------------------------------------------------------------------------------------------------------------
 
-snippetRepository.add(
-    sequence(variableOrPropertyDeclaration, colon, oneOf(...types), optional(sequence(is, placeholder()))),
-    [
-        { removeLeadingPlaceholder: true },
-        { removeShortcut: "iaae" }, //      "is-async-arrow-expression" wins over "private-as-arrow-expression"
-        { removeShortcut: "iaaf" }, //      "is-async-arrow-function" wins over "private-as-arrow-function"
-    ]
-);
+addSnippets(sequence(variableOrPropertyDeclaration, colon, oneOf(...types), optional(sequence(is, placeholder()))), [
+    { removeLeadingPlaceholder: true },
+    { removeShortcut: "iaae" }, //      "is-async-arrow-expression" wins over "private-as-arrow-expression"
+    { removeShortcut: "iaaf" }, //      "is-async-arrow-function" wins over "private-as-arrow-function"
+]);
 
 //----------------------------------------------------------------------------------------------------------------------
 // [variable|property _] : type = value
 //----------------------------------------------------------------------------------------------------------------------
 
 for (const [type, value] of scalarAndContainerTypesAndValues) {
-    snippetRepository.add(sequence(variableOrPropertyDeclaration, colon, type, is, value), [
-        { removeLeadingPlaceholder: true },
-    ]);
+    addSnippets(sequence(variableOrPropertyDeclaration, colon, type, is, value), [{ removeLeadingPlaceholder: true }]);
 }
+addSnippets;
 
 //----------------------------------------------------------------------------------------------------------------------
 // [variable|property _] [: _] = value
 //----------------------------------------------------------------------------------------------------------------------
 
 for (const value of values) {
-    snippetRepository.add(
-        sequence(variableOrPropertyDeclaration, optional(sequence(colon, placeholder())), is, value),
-        [
-            { removeLeadingPlaceholder: true },
-            { removeShortcut: "it" }, //        "it" wins over "is-true"
-            { removeShortcut: "if" }, //        "if" wins over "is-false"
-            { removeShortcut: "is" }, //        "private-static" wins over "is-string"
-            { removeShortcut: "pis" }, //       "print-interpolated-string" wins over "property-is-string"
-        ]
-    );
+    addSnippets(sequence(variableOrPropertyDeclaration, optional(sequence(colon, placeholder())), is, value), [
+        { removeLeadingPlaceholder: true },
+        { removeShortcut: "it" }, //        "it" wins over "is-true"
+        { removeShortcut: "if" }, //        "if" wins over "is-false"
+        { removeShortcut: "is" }, //        "private-static" wins over "is-string"
+        { removeShortcut: "pis" }, //       "print-interpolated-string" wins over "property-is-string"
+    ]);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -127,7 +120,7 @@ for (const value of values) {
 //----------------------------------------------------------------------------------------------------------------------
 
 for (const [type, value] of scalarAndContainerTypesAndValues) {
-    snippetRepository.add(sequence(variableOrPropertyDeclaration, is, value, as, type), [
+    addSnippets(sequence(variableOrPropertyDeclaration, is, value, as, type), [
         { removeLeadingPlaceholder: true },
         { removeShortcut: "isas" }, //          "private-static-as-string" wins over "is-string-as-string"
     ]);
@@ -138,7 +131,7 @@ for (const [type, value] of scalarAndContainerTypesAndValues) {
 //----------------------------------------------------------------------------------------------------------------------
 
 for (const value of arrowFunctionAndContainerValues) {
-    snippetRepository.add(value, [
+    addSnippets(value, [
         { removeLeadingPlaceholder: true },
         { ifId: "empty-array", removeShortcut: "a" }, // "array" and "empty-array" have the same shortcut
         { removeShortcut: "aae" }, //           "async-arrow-expression" wins over "as-arrow-expression"
@@ -150,4 +143,4 @@ for (const value of arrowFunctionAndContainerValues) {
 // [as const] [satisfies _]
 //----------------------------------------------------------------------------------------------------------------------
 
-snippetRepository.add(oneOf(asConst, asConstSatisfies, _satisfies));
+addSnippets(oneOf(asConst, asConstSatisfies, _satisfies));

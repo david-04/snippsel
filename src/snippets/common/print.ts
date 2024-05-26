@@ -1,7 +1,7 @@
+import { addSnippets } from "../../compiler/api.js";
 import { LANGUAGES } from "../../compiler/data/language.js";
 import { CURSOR, SELECTED_TEXT } from "../../compiler/data/placeholder.js";
 import { body } from "../../compiler/data/snippet-body.js";
-import { snippetRepository } from "../../compiler/data/snippet-repository.js";
 
 const PRINT = { id: "print", shortcuts: "p", voiceCommands: "print" } as const;
 const PRINT_STRING = { id: "print-string", shortcuts: "ps", voiceCommands: "print string" } as const;
@@ -15,7 +15,7 @@ const PRINT_INTERPOLATED = {
 // JavaScript and TypeScript
 //----------------------------------------------------------------------------------------------------------------------
 
-snippetRepository.add(
+addSnippets(
     LANGUAGES.js.jsx.ts.tsx,
     { ...PRINT, body: body.line("console.log(", CURSOR, SELECTED_TEXT, ");") },
     { ...PRINT_STRING, body: body.line('console.log("', CURSOR, SELECTED_TEXT, '");') },
@@ -26,7 +26,7 @@ snippetRepository.add(
 // Make
 //----------------------------------------------------------------------------------------------------------------------
 
-snippetRepository.add(
+addSnippets(
     LANGUAGES.make,
     { ...PRINT, body: body.line("$(info ", CURSOR, SELECTED_TEXT, ")") },
     // ps is reserved for patsubst
@@ -37,7 +37,7 @@ snippetRepository.add(
 // Ruby
 //----------------------------------------------------------------------------------------------------------------------
 
-snippetRepository.add(
+addSnippets(
     LANGUAGES.rb,
     { ...PRINT, body: body.line("puts ", CURSOR, SELECTED_TEXT) },
     { ...PRINT_STRING, body: body.line("puts '", CURSOR, SELECTED_TEXT, "'") },
@@ -48,7 +48,7 @@ snippetRepository.add(
 // Shell
 //----------------------------------------------------------------------------------------------------------------------
 
-snippetRepository.add(
+addSnippets(
     LANGUAGES.sh,
     { ...PRINT, body: body.line("echo ", CURSOR, SELECTED_TEXT) },
     { ...PRINT_STRING, body: body.line('echo "', CURSOR, SELECTED_TEXT, '"') },

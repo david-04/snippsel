@@ -1,7 +1,7 @@
+import { addSnippets } from "../../compiler/api.js";
 import { LANGUAGES } from "../../compiler/data/language.js";
 import { CURSOR, SELECTED_TEXT, VARIABLE } from "../../compiler/data/placeholder.js";
 import { body } from "../../compiler/data/snippet-body.js";
-import { snippetRepository } from "../../compiler/data/snippet-repository.js";
 
 const DO_WHILE = { id: "do-while", shortcuts: "dw", voiceCommands: "do while" } as const;
 const DO_UNTIL = { id: "do-until", shortcuts: "du", voiceCommands: "do until" } as const;
@@ -12,7 +12,7 @@ const UNTIL_DO = { id: "until-do", shortcuts: "ud", voiceCommands: "until, until
 // C-style languages
 //----------------------------------------------------------------------------------------------------------------------
 
-snippetRepository.add(
+addSnippets(
     LANGUAGES.ahk.awk.c.cpp.java.js.jsx.ts.tsx,
     {
         ...DO_WHILE,
@@ -48,7 +48,7 @@ snippetRepository.add(
 // Ruby
 //----------------------------------------------------------------------------------------------------------------------
 
-snippetRepository.add(
+addSnippets(
     LANGUAGES.rb,
     {
         ...DO_WHILE,
@@ -89,7 +89,7 @@ snippetRepository.add(
 // Shell
 //----------------------------------------------------------------------------------------------------------------------
 
-snippetRepository.add(
+addSnippets(
     LANGUAGES.sh,
     {
         ...DO_WHILE,

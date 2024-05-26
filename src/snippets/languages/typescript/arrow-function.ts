@@ -2,7 +2,7 @@
 // [async] () =>
 //----------------------------------------------------------------------------------------------------------------------
 
-// snippetRepository.add(
+// addSnippets(
 //     sequenceAll(
 //         arrowFunctionModifiers,
 //         fragment({
@@ -17,7 +17,7 @@
 // [async] () => {}
 //----------------------------------------------------------------------------------------------------------------------
 
-// snippetRepository.add(
+// addSnippets(
 //     sequenceAll(
 //         arrowFunctionModifiers,
 //         fragment({

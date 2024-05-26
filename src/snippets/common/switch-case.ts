@@ -1,7 +1,7 @@
+import { addSnippets } from "../../compiler/api.js";
 import { LANGUAGES } from "../../compiler/data/language.js";
 import { CURSOR, SELECTED_TEXT, VARIABLE } from "../../compiler/data/placeholder.js";
 import { body } from "../../compiler/data/snippet-body.js";
-import { snippetRepository } from "../../compiler/data/snippet-repository.js";
 
 const SWITCH_CASE = { id: "switch-case", shortcuts: "sc", voiceCommands: "switch case" } as const;
 
@@ -9,7 +9,7 @@ const SWITCH_CASE = { id: "switch-case", shortcuts: "sc", voiceCommands: "switch
 // C-style languages
 //----------------------------------------------------------------------------------------------------------------------
 
-snippetRepository.add(LANGUAGES.ahk.awk.c.cpp.java.js.jsx.ts.tsx, {
+addSnippets(LANGUAGES.ahk.awk.c.cpp.java.js.jsx.ts.tsx, {
     ...SWITCH_CASE,
     body: body //
         .line("switch (", VARIABLE(1, "variable"), ") {")
@@ -25,7 +25,7 @@ snippetRepository.add(LANGUAGES.ahk.awk.c.cpp.java.js.jsx.ts.tsx, {
 // Shell
 //----------------------------------------------------------------------------------------------------------------------
 
-snippetRepository.add(LANGUAGES.sh, {
+addSnippets(LANGUAGES.sh, {
     ...SWITCH_CASE,
     body: body //
         .line("case ", VARIABLE(1, "VARIABLE"), " in")
@@ -42,7 +42,7 @@ snippetRepository.add(LANGUAGES.sh, {
 // Ruby
 //----------------------------------------------------------------------------------------------------------------------
 
-snippetRepository.add(LANGUAGES.rb, {
+addSnippets(LANGUAGES.rb, {
     ...SWITCH_CASE,
     body: body //
         .line("case ", VARIABLE(1, "variable"))

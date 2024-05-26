@@ -1,7 +1,7 @@
+import { addSnippets } from "../../compiler/api.js";
 import { LANGUAGES } from "../../compiler/data/language.js";
 import { CURSOR, SELECTED_TEXT, VARIABLE } from "../../compiler/data/placeholder.js";
 import { body } from "../../compiler/data/snippet-body.js";
-import { snippetRepository } from "../../compiler/data/snippet-repository.js";
 
 const IF = { id: "if", shortcuts: "i", voiceCommands: "if" } as const;
 const IF_ELSE = { id: "if-else", shortcuts: "ie", voiceCommands: "if else" } as const;
@@ -12,7 +12,7 @@ const ELSE_IF = { id: "else-if", shortcuts: "ei", voiceCommands: "else if" } as 
 // C-style languages
 //----------------------------------------------------------------------------------------------------------------------
 
-snippetRepository.add(
+addSnippets(
     LANGUAGES.ahk.awk.c.cpp.java.js.jsx.ts.tsx,
     {
         ...IF,
@@ -50,7 +50,7 @@ snippetRepository.add(
 // Make
 //----------------------------------------------------------------------------------------------------------------------
 
-snippetRepository.add(
+addSnippets(
     LANGUAGES.make,
     {
         id: "if",
@@ -82,7 +82,7 @@ snippetRepository.add(
 // Ruby
 //----------------------------------------------------------------------------------------------------------------------
 
-snippetRepository.add(
+addSnippets(
     LANGUAGES.rb,
     {
         ...IF,
@@ -114,7 +114,7 @@ snippetRepository.add(
     }
 );
 
-snippetRepository.add(
+addSnippets(
     LANGUAGES.rb,
     {
         id: "unless",
@@ -142,7 +142,7 @@ snippetRepository.add(
 // Shell
 //----------------------------------------------------------------------------------------------------------------------
 
-snippetRepository.add(
+addSnippets(
     LANGUAGES.sh,
     {
         ...IF,

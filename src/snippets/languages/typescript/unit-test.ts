@@ -1,7 +1,7 @@
+import { addSnippets } from "../../../compiler/api.js";
 import { LANGUAGES } from "../../../compiler/data/language.js";
 import { CURSOR, SELECTED_TEXT, VARIABLE } from "../../../compiler/data/placeholder.js";
 import { body } from "../../../compiler/data/snippet-body.js";
-import { snippetRepository } from "../../../compiler/data/snippet-repository.js";
 
 const AFTER_ALL = { id: "after-all", shortcuts: "aa", voiceCommands: "after all" } as const;
 const AFTER_ALL_ASYNC = { id: "after-all-async", shortcuts: "aaa", voiceCommands: "after all async" } as const;
@@ -20,7 +20,7 @@ const IT_ASYNC = { id: "it-async", shortcuts: "ita", voiceCommands: "it async" }
 // JavaScript and TypeScript
 //----------------------------------------------------------------------------------------------------------------------
 
-snippetRepository.add(
+addSnippets(
     LANGUAGES.js.jsx.ts.tsx,
     {
         ...AFTER_ALL,
