@@ -1,5 +1,4 @@
 import { snippetRepository } from "../data/snippet-repository.js";
-import { Snippet } from "../data/snippet.js";
 import { SHORTCUT_PREFIX } from "../utils/constants.js";
 import { shortcutToSnippetName } from "../utils/to-snippet-name.js";
 import { writeFile } from "../utils/write-file.js";
@@ -9,18 +8,18 @@ import { writeFile } from "../utils/write-file.js";
 //----------------------------------------------------------------------------------------------------------------------
 
 export function createAutoHotkeyFiles() {
-    const snippets = Array.from(snippetRepository.groupByVsCodeLanguageId().values()).flat();
-    const allShortcuts = snippets.flatMap(snippet => Array.from(snippet.shortcuts));
-    const uniqueShortcuts = Array.from(new Set(allShortcuts)).sort((a, b) => b.length - a.length || a.localeCompare(b));
-    createAutoHotKeyVSCodeHotstrings(uniqueShortcuts);
-    createAutoHotKeyVSCodeActions(uniqueShortcuts, snippets);
+    createAutoHotKeyVSCodeHotstrings();
+    createAutoHotKeyVSCodeActions();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 // Create the VSCode hotstrings
 //----------------------------------------------------------------------------------------------------------------------
 
-function createAutoHotKeyVSCodeHotstrings(shortcuts: ReadonlyArray<string>) {
+function createAutoHotKeyVSCodeHotstrings() {
+    const shortcuts = Array.from(snippetRepository.groupByShortcut().keys()).sort(
+        (a, b) => b.length - a.length || a.localeCompare(b)
+    );
     const hotstrings = shortcuts.map(shortcut => toAutoHotkeyHotstring("VSCodeActions.insertSnippet", shortcut));
     writeFile("dist/autohotkey", "vscode-snippet-hotstrings.ahk", [...hotstrings, ""].join("\n"));
 }
@@ -38,24 +37,22 @@ function toAutoHotkeyHotstring(dispatcherFunction: string, shortcut: string) {
 // Create the VSCode actions
 //----------------------------------------------------------------------------------------------------------------------
 
-function createAutoHotKeyVSCodeActions(shortcuts: ReadonlyArray<string>, snippets: ReadonlyArray<Snippet>) {
-    const actions = shortcuts.map(shortcut => toAutoHotkeyAction("this.addSnippet", shortcut, snippets));
+function createAutoHotKeyVSCodeActions() {
+    const snippets = Array.from(snippetRepository.groupByShortcut())
+        .filter(([_, snippets]) => snippets.some(snippet => snippet.body.containsSelectedTextPlaceholder()))
+        .map(([shortcut, snippets]) => ({ shortcut, snippetId: snippets[0]!.id }) as const)
+        .sort((a, b) => b.shortcut.length - a.shortcut.length || a.shortcut.localeCompare(b.shortcut));
+
+    const actions = snippets.map(shortcut =>
+        toAutoHotkeyAction("this.addSnippet", shortcut.shortcut, shortcut.snippetId)
+    );
     writeFile("dist/autohotkey", "vscode-snippet-actions.ahk", [...actions, ""].join("\n"));
 }
 
-function toAutoHotkeyAction(dispatcherFunction: string, shortcut: string, snippets: ReadonlyArray<Snippet>) {
+function toAutoHotkeyAction(dispatcherFunction: string, shortcut: string, snippetId: string) {
     const hotstring = sanitizeString(`${SHORTCUT_PREFIX}${shortcut}⎵`);
-    const snippetId = sanitizeString(getAnySnippetId(snippets, shortcut));
     const qualifiedSnippetName = sanitizeString(shortcutToSnippetName(shortcut));
-    return `${dispatcherFunction}("${hotstring}", "${snippetId}", "${qualifiedSnippetName}")`;
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-// Get the ID of any snippet with the given shortcut
-//----------------------------------------------------------------------------------------------------------------------
-
-function getAnySnippetId(snippets: ReadonlyArray<Snippet>, shortcut: string) {
-    return snippets.filter(snippet => snippet.shortcuts.has(shortcut))[0]?.id ?? "unknown snippet";
+    return `${dispatcherFunction}("${hotstring}", "${sanitizeString(snippetId)}", "${qualifiedSnippetName}")`;
 }
 
 //----------------------------------------------------------------------------------------------------------------------

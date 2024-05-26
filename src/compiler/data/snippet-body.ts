@@ -1,4 +1,4 @@
-import { Placeholder } from "./placeholder.js";
+import { Placeholder, SelectedTextPlaceholder } from "./placeholder.js";
 
 //----------------------------------------------------------------------------------------------------------------------
 // Data types
@@ -39,6 +39,21 @@ export class SnippetBody {
             }
         }
         return this;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Check if it contains a placeholder for selected text
+    //------------------------------------------------------------------------------------------------------------------
+
+    public containsSelectedTextPlaceholder() {
+        for (const line of this.lines) {
+            for (const item of line) {
+                if (item instanceof SelectedTextPlaceholder) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
 
