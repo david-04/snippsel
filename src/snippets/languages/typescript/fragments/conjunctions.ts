@@ -1,19 +1,6 @@
 import { LANGUAGES } from "../../../../compiler/data/language.js";
 import { body } from "../../../../compiler/data/snippet-body.js";
 import { fragment } from "../../../../compiler/data/snippet-fragment.js";
-import { FRAGMENT_ID } from "../../../constants/fragment-ids.js";
-
-//----------------------------------------------------------------------------------------------------------------------
-// |
-//----------------------------------------------------------------------------------------------------------------------
-
-export const or = fragment({
-    id: "or",
-    languages: LANGUAGES.ts.tsx,
-    shortcuts: "o",
-    voiceCommands: "or",
-    body: body.line("|"),
-});
 
 //----------------------------------------------------------------------------------------------------------------------
 // =
@@ -26,36 +13,3 @@ export const is = fragment({
     voiceCommands: "",
     body: body.line("="),
 });
-
-//----------------------------------------------------------------------------------------------------------------------
-// <>
-//----------------------------------------------------------------------------------------------------------------------
-
-export const typeAnnotation = {
-    "<": fragment({
-        ...FRAGMENT_ID.of,
-        id: "<",
-        languages: LANGUAGES.ts.tsx,
-        shortcuts: "o",
-        voiceCommands: "of",
-        leadingSeparator: "",
-        body: body.line("<"),
-    }),
-    "< (no shortcut)": fragment({
-        ...FRAGMENT_ID.of,
-        id: "_<",
-        languages: LANGUAGES.ts.tsx,
-        shortcuts: "",
-        voiceCommands: "",
-        leadingSeparator: "",
-        body: body.line("<"),
-    }),
-    ">": fragment({
-        id: ">",
-        languages: LANGUAGES.ts.tsx,
-        shortcuts: "",
-        voiceCommands: "",
-        leadingSeparator: "",
-        body: body.line(">"),
-    }),
-};

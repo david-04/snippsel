@@ -23,7 +23,7 @@ export const brackets = fragment({
 
 export const array = { id: "array", shortcuts: "a", voiceCommands: "array" } as const;
 
-export const arrayOfType = oneOf(
+export const arrayOf = oneOf(
     fragment({
         id: "array-[of]",
         languages: LANGUAGES.ts.tsx,
@@ -42,13 +42,13 @@ export const arrayOfType = oneOf(
     )
 );
 
-export const readonlyArrayOfType = oneOf(
+export const readonlyArrayOf = oneOf(
     fragment({
         id: "readonly-array-[of]",
         languages: LANGUAGES.ts.tsx,
         shortcuts: ["ra", "roa", "rao", "roao"],
         voiceCommands: ["readonly array", "readonly array of"],
-        body: body.line("Array<", VARIABLE(10), ">"),
+        body: body.line("ReadonlyArray<", VARIABLE(10), ">"),
     }),
     ...scalarDataTypes.map(type =>
         fragment({
@@ -57,6 +57,52 @@ export const readonlyArrayOfType = oneOf(
             shortcuts: ["ra", "roa", "rao", "roao"].map(shortcut => `${shortcut}${type.shortcut}`),
             voiceCommands: ["array", "array of"].map(voiceCommand => `readonly ${voiceCommand} ${type.voiceCommand}`),
             body: body.line(`ReadonlyArray<${type.body}>`),
+        })
+    )
+);
+
+//----------------------------------------------------------------------------------------------------------------------
+// Sets
+//----------------------------------------------------------------------------------------------------------------------
+
+export const set = { id: "set", shortcuts: "s", voiceCommands: "set" } as const;
+
+export const setOf = oneOf(
+    fragment({
+        id: "set-[of]",
+        languages: LANGUAGES.ts.tsx,
+        shortcuts: ["s", "so"],
+        voiceCommands: ["set", "set of"],
+        body: body.line("Set<", VARIABLE(10), ">"),
+    }),
+    ...scalarDataTypes
+        .filter(type => type.id !== "boolean")
+        .map(type =>
+            fragment({
+                id: `set-[of]-${type.id}`,
+                languages: LANGUAGES.ts.tsx,
+                shortcuts: ["s", "so"].map(shortcut => `${shortcut}${type.shortcut}`),
+                voiceCommands: ["set", "set of"].map(voiceCommand => `${voiceCommand} ${type.voiceCommand}`),
+                body: body.line(`Set<${type.body}>`),
+            })
+        )
+);
+
+export const readonlySetOf = oneOf(
+    fragment({
+        id: "readonly-set-[of]",
+        languages: LANGUAGES.ts.tsx,
+        shortcuts: ["rs", "ros", "rso", "roso"],
+        voiceCommands: ["readonly set", "readonly set of"],
+        body: body.line("ReadonlySet<", VARIABLE(10), ">"),
+    }),
+    ...scalarDataTypes.map(type =>
+        fragment({
+            id: `readonly-set-[of]-${type.id}`,
+            languages: LANGUAGES.ts.tsx,
+            shortcuts: ["rs", "ros", "rso", "roso"].map(shortcut => `${shortcut}${type.shortcut}`),
+            voiceCommands: ["set", "set of"].map(voiceCommand => `readonly ${voiceCommand} ${type.voiceCommand}`),
+            body: body.line(`ReadonlySet<${type.body}>`),
         })
     )
 );

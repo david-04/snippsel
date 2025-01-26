@@ -5,7 +5,7 @@ import { body } from "../../../compiler/data/snippet-body.js";
 import { fragment, oneOf, optional, sequence } from "../../../compiler/data/snippet-fragment.js";
 import { asConst } from "./as-const-satisfies.js";
 import { exportConstOrLet } from "./export-const-or-let.js";
-import { array, arrayOfType, brackets, readonlyArrayOfType } from "./fragments/container-types.js";
+import { array, arrayOf, brackets, readonlyArrayOf } from "./fragments/container-types.js";
 import { _new } from "./fragments/keywords.js";
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -32,31 +32,28 @@ addSnippets(
 //----------------------------------------------------------------------------------------------------------------------
 
 addSnippets(
-    sequence(oneOf(arrayOfType, readonlyArrayOfType), brackets), //
+    sequence(oneOf(arrayOf, readonlyArrayOf), brackets), //
     [
         { ifId: "array-[of]", discardSnippet: true }, // already defined in "common"
     ]
 );
 
 //----------------------------------------------------------------------------------------------------------------------
-// [[export] const|let _ =] new Array(_)
+// [[export] const|let _ =] new Array[<_>](_)
 //----------------------------------------------------------------------------------------------------------------------
 
 addSnippets(
     sequence(
         optional(exportConstOrLet),
         _new,
-        fragment({
-            languages: LANGUAGES.js.jsx,
-            ...array,
-            body: body.line("Array"),
-        }),
+        oneOf(
+            arrayOf,
+            fragment({
+                languages: LANGUAGES.js.jsx,
+                ...array,
+                body: body.line("Array"),
+            })
+        ),
         brackets
     )
 );
-
-//----------------------------------------------------------------------------------------------------------------------
-// [[export] const|let _ =] new Array<_>(_)
-//----------------------------------------------------------------------------------------------------------------------
-
-addSnippets(sequence(optional(exportConstOrLet), _new, arrayOfType, brackets));
