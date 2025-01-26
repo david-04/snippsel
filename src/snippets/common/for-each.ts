@@ -261,6 +261,54 @@ addSnippets(
 );
 
 //----------------------------------------------------------------------------------------------------------------------
+// Python
+//----------------------------------------------------------------------------------------------------------------------
+
+addSnippets(
+    LANGUAGES.py,
+    {
+        ...FOR_EACH,
+        body: body //
+            .line(
+                "for ",
+                VARIABLE(1, "key"),
+                ", ",
+                VARIABLE(2, "value"),
+                " in ",
+                VARIABLE(3, "enumerate(array) | object.__dict__.items()"),
+                "):"
+            )
+            .line("\t", CURSOR, SELECTED_TEXT),
+    },
+    {
+        ...FOR_EACH_INDEX,
+        body: body //
+            .line(
+                "for ",
+                VARIABLE(1, "index"),
+                " in range(",
+                VARIABLE(2, "0"),
+                ", ",
+                VARIABLE(3, "100, STEP_SIZE"),
+                "):"
+            )
+            .line("\t", CURSOR, SELECTED_TEXT),
+    },
+    {
+        ...FOR_EACH_KEY,
+        body: body //
+            .line("for ", VARIABLE(1, "key"), " in ", VARIABLE(2, "dictionary | object.__dict__.items()"), "):")
+            .line("\t", CURSOR, SELECTED_TEXT),
+    },
+    {
+        ...FOR_EACH_VALUE,
+        body: body //
+            .line("for ", VARIABLE(1, "indexOrKey"), " in ", VARIABLE(2, "array | dictionary.values()"), ":")
+            .line("\t", CURSOR, SELECTED_TEXT),
+    }
+);
+
+//----------------------------------------------------------------------------------------------------------------------
 // Ruby
 //----------------------------------------------------------------------------------------------------------------------
 

@@ -24,7 +24,7 @@ export type SnippetWithMandatoryLanguages = SnippetBase & { readonly languages: 
 //----------------------------------------------------------------------------------------------------------------------
 
 export class SnippetRepository {
-    private snippets = new Array<Snippet>();
+    private readonly snippets = new Array<Snippet>();
 
     //------------------------------------------------------------------------------------------------------------------
     // Add snippets

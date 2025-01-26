@@ -33,6 +33,14 @@ addSnippets(
         body: body.line("function ", VARIABLE(1), "(", VARIABLE(2), ") {").line("\t", CURSOR, SELECTED_TEXT).line("}"),
     },
     {
+        id: "return-or-exit",
+        shortcuts: "roe",
+        voiceCommands: "return or exit",
+        body: body
+            .line("# shellcheck disable=SC2317")
+            .line("return ", VARIABLE(1, "1"), " 2>/dev/stderr || exit ", VARIABLE(1)),
+    },
+    {
         id: "shebang",
         shortcuts: "sb",
         voiceCommands: "shebang,shebang line",

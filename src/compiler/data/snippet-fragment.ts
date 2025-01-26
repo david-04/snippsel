@@ -103,7 +103,7 @@ export class SequencePermutation {
 
     public constructor(readonly fragments: ReadonlyArray<PermutableSnippet>) {}
 
-    public withLeadingSeparator(separator: string = " "): SequencePermutation {
+    public withLeadingSeparator(separator = " "): SequencePermutation {
         return new SequencePermutation(
             this.fragments.map((fragment, index) => (0 === index ? fragment.withLeadingSeparator(separator) : fragment))
         );

@@ -2,17 +2,19 @@ import { addSnippets } from "../../../compiler/api.js";
 import { LANGUAGES } from "../../../compiler/data/language.js";
 import { CURSOR, SELECTED_TEXT, VARIABLE } from "../../../compiler/data/placeholder.js";
 import { body } from "../../../compiler/data/snippet-body.js";
-import { fragment, sequence } from "../../../compiler/data/snippet-fragment.js";
+import { fragment, optional, sequence } from "../../../compiler/data/snippet-fragment.js";
 import { FRAGMENT_ID } from "../../constants/fragment-ids.js";
-import { methodModifiers } from "./fragments/modifiers.js";
+import { _async, _static, publicProtectedPrivate } from "./fragments/keywords.js";
 
 //---------------------------------------------------------------------------------------------------------------------
-// [public|protected|private] [static] [async] _ () { }
+// [public|protected|private] [static] [async] _ (_) { _ }
 //----------------------------------------------------------------------------------------------------------------------
 
 addSnippets(
     sequence(
-        methodModifiers,
+        optional(publicProtectedPrivate),
+        optional(_static),
+        optional(_async),
         fragment({
             ...FRAGMENT_ID.method,
             languages: LANGUAGES.js.jsx.ts.tsx,

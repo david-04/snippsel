@@ -199,11 +199,15 @@ function replaceLastPlaceholderWithCursor(lines: Array<Array<string | Placeholde
 //----------------------------------------------------------------------------------------------------------------------
 
 function cartesianProduct<T>(groups: ReadonlyArray<ReadonlyArray<T>>): ReadonlyArray<ReadonlyArray<T>> {
-    return groups.reduce((result, currentGroup) => {
-        if (result.length) {
-            return result.flatMap(combinedSoFar => currentGroup.map(currentValue => [...combinedSoFar, currentValue]));
-        } else {
-            return currentGroup.map(item => [item]);
-        }
-    }, new Array<ReadonlyArray<T>>());
+    return groups
+        .filter(group => group.length)
+        .reduce((result, currentGroup) => {
+            if (result.length) {
+                return result.flatMap(combinedSoFar =>
+                    currentGroup.map(currentValue => [...combinedSoFar, currentValue])
+                );
+            } else {
+                return currentGroup.map(item => [item]);
+            }
+        }, new Array<ReadonlyArray<T>>());
 }

@@ -4,11 +4,7 @@ import { SnippetWithMandatoryLanguages } from "../../compiler/data/snippet-repos
 export const FRAGMENT_ID = {
     //
     abstract: { id: "abstract", shortcuts: "a", voiceCommands: "abstract", body: body.line("abstract") },
-    arrowExpression: {
-        id: "arrow-expression",
-        shortcuts: "ae",
-        voiceCommands: "arrow expression,lambda expression,lambda",
-    },
+    arrowExpression: { id: "arrow-expression", shortcuts: "ae", voiceCommands: "arrow expression" },
     arrowFunction: { id: "arrow-function", shortcuts: "af", voiceCommands: "arrow function, lambda function" },
     async: { id: "async", shortcuts: "a", voiceCommands: "async", body: body.line("async") },
     class: { id: "class", shortcuts: "cl", voiceCommands: "class" },
@@ -25,8 +21,9 @@ export const FRAGMENT_ID = {
     private: { id: "private", shortcuts: "i,pri", voiceCommands: "private", body: body.line("private") },
     protected: { id: "protected", shortcuts: "o,pro", voiceCommands: "protected", body: body.line("protected") },
     public: { id: "public", shortcuts: "u,pub", voiceCommands: "public", body: body.line("public") },
-    readonly: { id: "readonly", shortcuts: "r", voiceCommands: "readonly", body: body.line("readonly") },
+    readonly: { id: "readonly", shortcuts: "r,ro", voiceCommands: "readonly", body: body.line("readonly") },
     static: { id: "static", shortcuts: "s", voiceCommands: "static", body: body.line("static") },
+    new: { id: "new", shortcuts: "n", voiceCommands: "new", body: body.line("new") },
 
     of: { id: "of", shortcuts: "o", voiceCommands: "of" },
 

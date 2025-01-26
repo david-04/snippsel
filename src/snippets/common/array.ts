@@ -12,7 +12,7 @@ const ARRAY = { id: "array", shortcuts: "a", voiceCommands: "array" } as const;
 addSnippets(
     {
         ...ARRAY,
-        languages: LANGUAGES.c.cpp.json.js.jsx.ts.tsx.rb,
+        languages: LANGUAGES.c.cpp.json.js.jsx.py.ts.tsx.rb,
         body: body.line("[", CURSOR, SELECTED_TEXT, "]"),
     },
     {

@@ -54,6 +54,16 @@ addSnippets({
 
 addSnippets({
     ...THROW_ERROR,
+    languages: LANGUAGES.py,
+    body: body.line("raise ", VARIABLE(1, "RuntimeError"), '("', SELECTED_TEXT, CURSOR, '")'),
+});
+
+//----------------------------------------------------------------------------------------------------------------------
+// Ruby
+//----------------------------------------------------------------------------------------------------------------------
+
+addSnippets({
+    ...THROW_ERROR,
     languages: LANGUAGES.rb,
     body: body.line("raise ", VARIABLE(1, "StandardError"), ', "', SELECTED_TEXT, CURSOR, '"'),
 });

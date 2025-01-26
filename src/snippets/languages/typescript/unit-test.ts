@@ -3,71 +3,106 @@ import { LANGUAGES } from "../../../compiler/data/language.js";
 import { CURSOR, SELECTED_TEXT, VARIABLE } from "../../../compiler/data/placeholder.js";
 import { body } from "../../../compiler/data/snippet-body.js";
 
-const AFTER_ALL = { id: "after-all", shortcuts: "aa", voiceCommands: "after all" } as const;
-const AFTER_ALL_ASYNC = { id: "after-all-async", shortcuts: "aaa", voiceCommands: "after all async" } as const;
-const AFTER_EACH = { id: "after-each", shortcuts: "", voiceCommands: "after each" } as const;
-const AFTER_EACH_ASYNC = { id: "after-each-async", shortcuts: "aea", voiceCommands: "after each async" } as const;
-const BEFORE_ALL = { id: "before-all", shortcuts: "ba", voiceCommands: "before all" } as const;
-const BEFORE_ALL_ASYNC = { id: "before-all-async", shortcuts: "baa", voiceCommands: "before all async" } as const;
-const BEFORE_EACH = { id: "before-each", shortcuts: "be", voiceCommands: "before each" } as const;
-const BEFORE_EACH_ASYNC = { id: "before-each-async", shortcuts: "bea", voiceCommands: "before each async" } as const;
-const DESCRIBE = { id: "describe", shortcuts: "d", voiceCommands: "describe" } as const;
-const DESCRIBE_ASYNC = { id: "describe-async", shortcuts: "da", voiceCommands: "describe async" } as const;
-const IT = { id: "it", shortcuts: "it", voiceCommands: "it" } as const;
-const IT_ASYNC = { id: "it-async", shortcuts: "ita", voiceCommands: "it async" } as const;
-
 //----------------------------------------------------------------------------------------------------------------------
-// JavaScript and TypeScript
+// "after" hooks
 //----------------------------------------------------------------------------------------------------------------------
 
 addSnippets(
     LANGUAGES.js.jsx.ts.tsx,
     {
-        ...AFTER_ALL,
+        id: "after-all",
+        shortcuts: "aa",
+        voiceCommands: "after all",
         body: body.line("afterAll(() => ", CURSOR, SELECTED_TEXT, ");"),
     },
     {
-        ...AFTER_ALL_ASYNC,
+        id: "after-all-async",
+        shortcuts: "aaa",
+        voiceCommands: "after all async",
         body: body.line("afterAll(async () => {").line("\t", CURSOR, SELECTED_TEXT).line("});"),
     },
     {
-        ...AFTER_EACH, // no shortcut (conflucts with "arrow expression")
+        id: "after-each",
+        shortcuts: "", // no shortcut (conflicts with "arrow expression")
+        voiceCommands: "after each",
         body: body.line("afterEach(() => ", CURSOR, SELECTED_TEXT, ");"),
     },
     {
-        ...AFTER_EACH_ASYNC,
+        id: "after-each-async",
+        shortcuts: "aea",
+        voiceCommands: "after each async",
         body: body.line("afterEach(async () => {").line("\t", CURSOR, SELECTED_TEXT).line("});"),
-    },
+    }
+);
+
+//----------------------------------------------------------------------------------------------------------------------
+// "before" hooks
+//----------------------------------------------------------------------------------------------------------------------
+
+addSnippets(
+    LANGUAGES.js.jsx.ts.tsx,
     {
-        ...BEFORE_ALL,
+        id: "before-all",
+        shortcuts: "ba",
+        voiceCommands: "before all",
         body: body.line("beforeAll(() => ", CURSOR, SELECTED_TEXT, ");"),
     },
     {
-        ...BEFORE_ALL_ASYNC,
+        id: "before-all-async",
+        shortcuts: "baa",
+        voiceCommands: "before all async",
         body: body.line("beforeAll(async () => {").line("\t", CURSOR, SELECTED_TEXT).line("});"),
     },
     {
-        ...BEFORE_EACH,
+        id: "before-each",
+        shortcuts: "be",
+        voiceCommands: "before each",
         body: body.line("beforeEach(() => ", CURSOR, SELECTED_TEXT, ");"),
     },
     {
-        ...BEFORE_EACH_ASYNC,
+        id: "before-each-async",
+        shortcuts: "bea",
+        voiceCommands: "before each async",
         body: body.line("beforeEach(async () => {").line("\t", CURSOR, SELECTED_TEXT).line("});"),
-    },
+    }
+);
+
+//----------------------------------------------------------------------------------------------------------------------
+// "describe" blocks
+//----------------------------------------------------------------------------------------------------------------------
+
+addSnippets(
+    LANGUAGES.js.jsx.ts.tsx,
     {
-        ...DESCRIBE,
+        id: "describe",
+        shortcuts: "d",
+        voiceCommands: "describe",
         body: body.line('describe("', VARIABLE(1), '", () => {').line("\t", CURSOR, SELECTED_TEXT).line("});"),
     },
     {
-        ...DESCRIBE_ASYNC,
+        id: "describe-async",
+        shortcuts: "da",
+        voiceCommands: "describe async",
         body: body.line('describe("', VARIABLE(1), '", async () => {').line("\t", CURSOR, SELECTED_TEXT).line("});"),
-    },
+    }
+);
+
+//----------------------------------------------------------------------------------------------------------------------
+// "it" blocks
+//----------------------------------------------------------------------------------------------------------------------
+
+addSnippets(
+    LANGUAGES.js.jsx.ts.tsx,
     {
-        ...IT,
+        id: "it",
+        shortcuts: "it",
+        voiceCommands: "it",
         body: body.line('it("', VARIABLE(1), '", () => {').line("\t", CURSOR, SELECTED_TEXT).line("});"),
     },
     {
-        ...IT_ASYNC,
+        id: "it-async",
+        shortcuts: "ita",
+        voiceCommands: "it async",
         body: body.line('it("', VARIABLE(1), '", async () => {').line("\t", CURSOR, SELECTED_TEXT).line("});"),
     }
 );

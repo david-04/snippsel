@@ -12,14 +12,36 @@ const PRINT_INTERPOLATED = {
 } as const;
 
 //----------------------------------------------------------------------------------------------------------------------
+// AutoHotkey
+//----------------------------------------------------------------------------------------------------------------------
+
+addSnippets(
+    LANGUAGES.ahk,
+    { ...PRINT, body: body.line("MsgBox(", CURSOR, SELECTED_TEXT, ")") },
+    { ...PRINT_STRING, body: body.line('MsgBox("', CURSOR, SELECTED_TEXT, '")') },
+    { ...PRINT_INTERPOLATED, body: body.line("MsgBox(", CURSOR, SELECTED_TEXT, ")") }
+);
+
+//----------------------------------------------------------------------------------------------------------------------
+// AWK
+//----------------------------------------------------------------------------------------------------------------------
+
+addSnippets(
+    LANGUAGES.awk,
+    { ...PRINT, body: body.line("print ", CURSOR, SELECTED_TEXT) },
+    { ...PRINT_STRING, body: body.line('print "', CURSOR, SELECTED_TEXT, '"') },
+    { ...PRINT_INTERPOLATED, body: body.line('print "', CURSOR, SELECTED_TEXT, '"') }
+);
+
+//----------------------------------------------------------------------------------------------------------------------
 // JavaScript and TypeScript
 //----------------------------------------------------------------------------------------------------------------------
 
 addSnippets(
     LANGUAGES.js.jsx.ts.tsx,
-    { ...PRINT, body: body.line("console.log(", CURSOR, SELECTED_TEXT, ");") },
-    { ...PRINT_STRING, body: body.line('console.log("', CURSOR, SELECTED_TEXT, '");') },
-    { ...PRINT_INTERPOLATED, body: body.line("console.log(`${", CURSOR, SELECTED_TEXT, "}`);") }
+    { ...PRINT, body: body.line("console.log(", CURSOR, SELECTED_TEXT, ")") },
+    { ...PRINT_STRING, body: body.line('console.log("', CURSOR, SELECTED_TEXT, '")') },
+    { ...PRINT_INTERPOLATED, body: body.line("console.log(`${", CURSOR, SELECTED_TEXT, "}`)") }
 );
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -31,6 +53,17 @@ addSnippets(
     { ...PRINT, body: body.line("$(info ", CURSOR, SELECTED_TEXT, ")") },
     // ps is reserved for patsubst
     { ...PRINT_INTERPOLATED, body: body.line("$(info $(", CURSOR, SELECTED_TEXT, "))") }
+);
+
+//----------------------------------------------------------------------------------------------------------------------
+// Python
+//----------------------------------------------------------------------------------------------------------------------
+
+addSnippets(
+    LANGUAGES.py,
+    { ...PRINT, body: body.line("print(", CURSOR, SELECTED_TEXT, ")") },
+    { ...PRINT_STRING, body: body.line('print ("', CURSOR, SELECTED_TEXT, '")') },
+    { ...PRINT_INTERPOLATED, body: body.line('print(f"{', CURSOR, SELECTED_TEXT, '}")') }
 );
 
 //----------------------------------------------------------------------------------------------------------------------

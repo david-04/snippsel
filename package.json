@@ -1,6 +1,6 @@
 {
     "dependencies": {
-        "@types/node": "^20.11.30"
+        "@types/node": "^22.10.10"
     },
     "name": "snippet-repository",
     "version": "0.0.0",

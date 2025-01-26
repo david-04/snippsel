@@ -21,7 +21,7 @@ addSnippets(
     },
     {
         ...COMMENT_BLOCK,
-        languages: LANGUAGES.awk.ini.make.rb.sh,
+        languages: LANGUAGES.awk.ini.make.py.rb.sh,
         body: body.line("#", dashes(119)).line("# ", CURSOR).line("#", dashes(119)),
     },
     {

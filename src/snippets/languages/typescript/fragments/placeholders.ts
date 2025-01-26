@@ -3,11 +3,18 @@ import { VARIABLE } from "../../../../compiler/data/placeholder.js";
 import { body } from "../../../../compiler/data/snippet-body.js";
 import { fragment } from "../../../../compiler/data/snippet-fragment.js";
 
-export const typePlaceholder = fragment({
-    id: "[TYPE]",
-    languages: LANGUAGES.ts.tsx,
+export const identifierPlaceholder = fragment({
+    id: "[identifier]",
+    languages: LANGUAGES.js.jsx.ts.tsx,
     shortcuts: "",
     voiceCommands: "",
-    leadingSeparator: "",
+    body: body.line(VARIABLE(1)),
+});
+
+export const valuePlaceholder = fragment({
+    id: "[value]",
+    languages: LANGUAGES.js.jsx.ts.tsx,
+    shortcuts: "",
+    voiceCommands: "",
     body: body.line(VARIABLE(1)),
 });

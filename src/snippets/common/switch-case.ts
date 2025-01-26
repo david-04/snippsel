@@ -22,13 +22,26 @@ addSnippets(LANGUAGES.ahk.awk.c.cpp.java.js.jsx.ts.tsx, {
 });
 
 //----------------------------------------------------------------------------------------------------------------------
+// Python
+//----------------------------------------------------------------------------------------------------------------------
+
+addSnippets(LANGUAGES.py, {
+    ...SWITCH_CASE,
+    body: body //
+        .line("if ", VARIABLE(1, "value == 1"), ":")
+        .line("\t", CURSOR, SELECTED_TEXT)
+        .line("else:")
+        .line("\t"),
+});
+
+//----------------------------------------------------------------------------------------------------------------------
 // Shell
 //----------------------------------------------------------------------------------------------------------------------
 
 addSnippets(LANGUAGES.sh, {
     ...SWITCH_CASE,
     body: body //
-        .line("case ", VARIABLE(1, "VARIABLE"), " in")
+        .line(`case \${`, VARIABLE(1, "VARIABLE"), "?} in")
         .line(VARIABLE(2, "value1 | value2"), ")")
         .line("\t", CURSOR, SELECTED_TEXT)
         .line("\t;;")

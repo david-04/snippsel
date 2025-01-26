@@ -1,7 +1,7 @@
-import { LANGUAGES } from "../../../../compiler/data/language.js";
-import { CURSOR } from "../../../../compiler/data/placeholder.js";
-import { body } from "../../../../compiler/data/snippet-body.js";
-import { fragment } from "../../../../compiler/data/snippet-fragment.js";
+import { addSnippets } from "../../../compiler/api.js";
+import { LANGUAGES } from "../../../compiler/data/language.js";
+import { body } from "../../../compiler/data/snippet-body.js";
+import { fragment, sequence } from "../../../compiler/data/snippet-fragment.js";
 
 //----------------------------------------------------------------------------------------------------------------------
 // as const
@@ -15,6 +15,8 @@ export const asConst = fragment({
     body: body.line("as const"),
 });
 
+addSnippets(asConst);
+
 //----------------------------------------------------------------------------------------------------------------------
 // satisfies
 //----------------------------------------------------------------------------------------------------------------------
@@ -24,17 +26,24 @@ export const _satisfies = fragment({
     languages: LANGUAGES.ts.tsx,
     shortcuts: "sf",
     voiceCommands: "satisfies",
-    body: body.line("satisfies ", CURSOR),
+    body: body.line("satisfies "),
 });
+
+addSnippets(_satisfies);
 
 //----------------------------------------------------------------------------------------------------------------------
 // as const satisfies
 //----------------------------------------------------------------------------------------------------------------------
 
-export const asConstSatisfies = fragment({
-    id: "as-const-satsifies",
-    languages: LANGUAGES.ts.tsx,
-    shortcuts: "acs",
-    voiceCommands: "as const satisfies",
-    body: body.line("as const satisfies ", CURSOR),
-});
+export const asConstSatisfies = sequence(
+    asConst,
+    fragment({
+        id: "satisfies",
+        languages: LANGUAGES.ts.tsx,
+        shortcuts: "s",
+        voiceCommands: "satisfies",
+        body: body.line("satisfies "),
+    })
+);
+
+addSnippets(asConstSatisfies);

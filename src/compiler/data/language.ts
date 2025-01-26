@@ -17,6 +17,7 @@ export const LANGUAGE_IDS = [
     "jsx",
     "make",
     "md",
+    "py",
     "rb",
     "sh",
     "sql",
@@ -58,7 +59,7 @@ export const VSCODE_LANGUAGE_ID_TO_LANGUAGE_ID = {
     markdown: "md",
     plaintext: undefined,
     powershell: undefined,
-    python: undefined,
+    python: "py",
     ruby: "rb",
     sass: undefined,
     scss: undefined,
@@ -203,6 +204,10 @@ class EmptyLanguageBuilder {
 
     public get md() {
         return this.cloneAndAppend("md");
+    }
+
+    public get py() {
+        return this.cloneAndAppend("py");
     }
 
     public get rb() {

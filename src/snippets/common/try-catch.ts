@@ -11,6 +11,64 @@ const TRY_CATCH_FINALLY = { id: "try-catch-finally", shortcuts: "tcf", voiceComm
 const TRY_FINALLY = { id: "try-finally", shortcuts: "tf", voiceCommands: "try finally" } as const;
 
 //----------------------------------------------------------------------------------------------------------------------
+// AutoHotkey
+//----------------------------------------------------------------------------------------------------------------------
+
+addSnippets(
+    LANGUAGES.ahk,
+    {
+        ...TRY,
+        body: body //
+            .line("try {")
+            .line("\t", CURSOR, SELECTED_TEXT)
+            .line("}"),
+    },
+    {
+        ...CATCH,
+        body: body //
+            .line("catch (Any as ", VARIABLE(1, "Error"), ") {")
+            .line("\t", CURSOR, SELECTED_TEXT)
+            .line("}"),
+    },
+    {
+        ...FINALLY,
+        body: body //
+            .line("finally {")
+            .line("\t", CURSOR, SELECTED_TEXT)
+            .line("}"),
+    },
+    {
+        ...TRY_CATCH,
+        body: body //
+            .line("try {")
+            .line("\t", CURSOR, SELECTED_TEXT)
+            .line("} catch (Any as ", VARIABLE(1, "error"), ") {")
+            .line("\t")
+            .line("}"),
+    },
+    {
+        ...TRY_CATCH_FINALLY,
+        body: body //
+            .line("try {")
+            .line("\t", CURSOR, SELECTED_TEXT)
+            .line("} catch (Any as ", VARIABLE(1, "error"), ") {")
+            .line("\t")
+            .line("} finally {")
+            .line("\t")
+            .line("} "),
+    },
+    {
+        ...TRY_FINALLY,
+        body: body //
+            .line("try {")
+            .line("\t", CURSOR, SELECTED_TEXT)
+            .line("} finally {")
+            .line("\t")
+            .line("} "),
+    }
+);
+
+//----------------------------------------------------------------------------------------------------------------------
 // Java
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -123,6 +181,58 @@ addSnippets(
             .line("} finally {")
             .line("\t")
             .line("} "),
+    }
+);
+
+//----------------------------------------------------------------------------------------------------------------------
+// Python
+//----------------------------------------------------------------------------------------------------------------------
+
+addSnippets(
+    LANGUAGES.py,
+    {
+        ...TRY,
+        body: body //
+            .line("try:")
+            .line("\t", CURSOR, SELECTED_TEXT),
+    },
+    {
+        ...CATCH,
+        body: body //
+            .line("except ", VARIABLE(1, "ExceptionType"), " as ", VARIABLE(2, "error"), ":")
+            .line("\t", CURSOR, SELECTED_TEXT),
+    },
+    {
+        ...FINALLY,
+        body: body //
+            .line("finally:")
+            .line("\t", CURSOR, SELECTED_TEXT),
+    },
+    {
+        ...TRY_CATCH,
+        body: body //
+            .line("try:")
+            .line("\t", CURSOR, SELECTED_TEXT)
+            .line("except ", VARIABLE(1, "ExceptionType"), " as ", VARIABLE(2, "error"), ":")
+            .line("\t"),
+    },
+    {
+        ...TRY_CATCH_FINALLY,
+        body: body //
+            .line("try:")
+            .line("\t", CURSOR, SELECTED_TEXT)
+            .line("except ", VARIABLE(1, "ExceptionType"), " as ", VARIABLE(2, "error"), ":")
+            .line("\t")
+            .line("finally:")
+            .line("\t"),
+    },
+    {
+        ...TRY_FINALLY,
+        body: body //
+            .line("try:")
+            .line("\t", CURSOR, SELECTED_TEXT)
+            .line("finally:")
+            .line("\t"),
     }
 );
 
