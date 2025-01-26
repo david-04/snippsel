@@ -3,7 +3,7 @@ import { LANGUAGES } from "../../../compiler/data/language.js";
 import { VARIABLE } from "../../../compiler/data/placeholder.js";
 import { body } from "../../../compiler/data/snippet-body.js";
 import { fragment, optional, sequence } from "../../../compiler/data/snippet-fragment.js";
-import { _readonly, _static, publicProtectedPrivate } from "./fragments/keywords.js";
+import { _readonly, _static, publicProtectedPrivate } from "./fragments.js";
 
 //----------------------------------------------------------------------------------------------------------------------
 // [private|protected|public] [static] [readonly] _

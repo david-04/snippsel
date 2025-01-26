@@ -3,7 +3,7 @@ import { LANGUAGES } from "../../../compiler/data/language.js";
 import { CURSOR, VARIABLE } from "../../../compiler/data/placeholder.js";
 import { body } from "../../../compiler/data/snippet-body.js";
 import { fragment, optional, sequence } from "../../../compiler/data/snippet-fragment.js";
-import { _export } from "./fragments/keywords.js";
+import { _export } from "./fragments.js";
 
 //---------------------------------------------------------------------------------------------------------------------
 // [export] type _ = _

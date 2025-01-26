@@ -4,7 +4,7 @@ import { CURSOR, SELECTED_TEXT, VARIABLE } from "../../../compiler/data/placehol
 import { body } from "../../../compiler/data/snippet-body.js";
 import { fragment, sequence } from "../../../compiler/data/snippet-fragment.js";
 import { FRAGMENT_ID } from "../../constants/fragment-ids.js";
-import { publicStaticFinalAbstract } from "./fragments/modifiers.js";
+import { publicStaticFinalAbstract } from "./fragments.js";
 
 //---------------------------------------------------------------------------------------------------------------------
 // [public|protected|private] [static] [final] [abstract] class _ { }

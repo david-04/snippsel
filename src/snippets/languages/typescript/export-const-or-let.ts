@@ -3,8 +3,7 @@ import { LANGUAGES } from "../../../compiler/data/language.js";
 import { CURSOR, SELECTED_TEXT, VARIABLE } from "../../../compiler/data/placeholder.js";
 import { body } from "../../../compiler/data/snippet-body.js";
 import { fragment, oneOf, optional, sequence } from "../../../compiler/data/snippet-fragment.js";
-import { is } from "./fragments/conjunctions.js";
-import { _const, _export, _let } from "./fragments/keywords.js";
+import { _const, _export, _let, is } from "./fragments.js";
 
 //----------------------------------------------------------------------------------------------------------------------
 // [export] const|let _ = _

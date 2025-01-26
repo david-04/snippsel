@@ -5,7 +5,7 @@ import { body } from "../../../compiler/data/snippet-body.js";
 import { fragment, optional, sequence } from "../../../compiler/data/snippet-fragment.js";
 import { FRAGMENT_ID } from "../../constants/fragment-ids.js";
 import { exportConstOrLet } from "./export-const-or-let.js";
-import { _async } from "./fragments/keywords.js";
+import { _async } from "./fragments.js";
 
 //----------------------------------------------------------------------------------------------------------------------
 // [[export] [const|let] _ =] [async] (_) => _
