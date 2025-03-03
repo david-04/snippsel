@@ -26,9 +26,9 @@ addSnippets(
         shortcuts: "dc",
         voiceCommands: "dev command",
         body: body
-            .line("$(call dc.lint,                    yarn lint,   src/*.ts, --workers=4, build/.tsbuildinfo)")
-            .line("$(call dc.run, run server default, yarn server, express,  --debug,     build/.tsbuildinfo)")
-            .line("$(call dc.test,                    yarn test,   src/*.ts, --workers=4, build/.tsbuildinfo)"),
+            .line("$(call dc.lint,                yarn lint,   src/*.ts, --workers=4, build/.tsbuildinfo)")
+            .line("$(call dc.run, default server, yarn server, express,  --debug,     build/.tsbuildinfo)")
+            .line("$(call dc.test,                yarn test,   src/*.ts, --workers=4, build/.tsbuildinfo)"),
     },
     {
         id: "dev-command-lint",
@@ -40,7 +40,7 @@ addSnippets(
         id: "dev-command-run",
         shortcuts: "dcr",
         voiceCommands: "dev command run",
-        body: body.line("$(call dc.run, run server default, yarn server, express, --debug, build/.tsbuildinfo)"),
+        body: body.line("$(call dc.run, default server, yarn server, express, --debug, build/.tsbuildinfo)"),
     },
     {
         id: "dev-command-test",

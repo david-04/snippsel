@@ -2,10 +2,10 @@
     "dependencies": {
         "@types/node": "^22.10.10"
     },
-    "name": "snippet-repository",
+    "name": "snippsel",
     "version": "0.0.0",
     "private": true,
-    "license": "UNLICENSED",
-    "swpm": "npm",
-    "type": "module"
+    "license": "MIT",
+    "type": "module",
+    "swpm": "npm"
 }
