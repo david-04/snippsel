@@ -11,10 +11,10 @@ INSTALL_CMD+= && echo "Installing AutoHotkey..." \
               && cp -f dist/autohotkey/*.ahk "../AutoHotkey/generated"
 endif
 
-ifneq "$(wildcard ../../Utilities/Talon/Resources/UserScripts/generated)" ""
-INSTALL_CMD+= && echo "Installing Talon..." \
-              && cp -f dist/talon/*.talon "../../Utilities/Talon/Resources/UserScripts/generated"
-endif
+# ifneq "$(wildcard ../../Utilities/Talon/Resources/UserScripts/generated)" ""
+# INSTALL_CMD+= && echo "Installing Talon..." \
+#               && cp -f dist/talon/*.talon "../../Utilities/Talon/Resources/UserScripts/generated"
+# endif
 
 ifneq "$(wildcard ../../TextProcessing/VSCode/Resources/Extensions/david-04.vscode-1.0.0/snippets/)" ""
 INSTALL_CMD+= && echo "Installing VSCode..." \
@@ -25,11 +25,8 @@ endif
 # Default target
 #-----------------------------------------------------------------------------------------------------------------------
 
-autorun : dist/timestamp.tmp;
-
-dist/timestamp.tmp : $(LP_PREREQUISITE_TSC)
-	echo "Generating snippets..." && $(call lp.run, build/snippsel.js) $(INSTALL_CMD) && touch $@
-
+autorun : build/.timestamp.tsc;
+	echo "Generating snippets..." && $(call lp.run, build/snippsel.js) $(INSTALL_CMD)
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Clean

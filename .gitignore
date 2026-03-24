@@ -8,3 +8,12 @@
 /node_modules
 /test
 /build/.timestamp.*
+/build/**/*.cjs
+/build/**/*.cjs.map
+/build/**/*.d.cjs
+/build/**/*.d.jsx
+/build/**/*.d.mjs
+/build/**/*.jsx
+/build/**/*.jsx.map
+/build/**/*.mjs
+/build/**/*.mjs.map

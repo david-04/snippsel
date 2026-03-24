@@ -26,9 +26,23 @@ addSnippets(
         shortcuts: "dc",
         voiceCommands: "dev command",
         body: body
+            .line("$(call dc.build,               tsc -b,      src/*.ts, --no-emit,   src/generated.ts  )")
+            .line("$(call dc.format,              biome,       src/*.ts,  --write,    src/generated.ts  )")
             .line("$(call dc.lint,                yarn lint,   src/*.ts, --workers=4, build/.tsbuildinfo)")
             .line("$(call dc.run, default server, yarn server, express,  --debug,     build/.tsbuildinfo)")
             .line("$(call dc.test,                yarn test,   src/*.ts, --workers=4, build/.tsbuildinfo)"),
+    },
+    {
+        id: "dev-command-build",
+        shortcuts: "dcb",
+        voiceCommands: "dev command build",
+        body: body.line("$(call dc.build, tsc -b, src/*.ts, --no-emit, src/generated.ts)"),
+    },
+    {
+        id: "dev-command-format",
+        shortcuts: "dcf",
+        voiceCommands: "dev command format",
+        body: body.line("$(call dc.format, biome, src/*.ts, --write, src/generated.ts)"),
     },
     {
         id: "dev-command-lint",

@@ -3,7 +3,8 @@ import { snippetRepository } from "../data/snippet-repository.js";
 import { Snippet } from "../data/snippet.js";
 import { writeFile } from "../utils/write-file.js";
 
-const SEPARATOR_LINE = "".padEnd(120, "-");
+const LINE_LENGTH = 120;
+const SEPARATOR_LINE = "".padEnd(LINE_LENGTH, "-");
 
 //----------------------------------------------------------------------------------------------------------------------
 // Create reports
@@ -51,7 +52,7 @@ function createTxtFileForOneLanguage(
             ([shortcut, snippetId]) =>
                 `${shortcut} ${" ".padEnd(4 + maxShortcutLength - shortcut.length, ".")} ${snippetId}`
         )
-        .sort();
+        .sort((a, b) => a.localeCompare(b));
     writeFile("dist/reports", `${languageId}.txt`, [...header, ...report, ""].join("\n"));
 }
 
@@ -61,8 +62,8 @@ function createTxtFileForOneLanguage(
 
 function createReportForAllLanguages() {
     const shortcutToSnippets = snippetRepository.groupByShortcut();
-    const shortcuts = Array.from(shortcutToSnippets.keys()).sort();
-    const languageIds = [...LANGUAGE_IDS].sort();
+    const shortcuts = Array.from(shortcutToSnippets.keys()).sort((a, b) => a.localeCompare(b));
+    const languageIds = [...LANGUAGE_IDS].sort((a, b) => a.localeCompare(b));
     const maxShortcutLength = shortcuts.reduce((maxLength, shortcut) => Math.max(maxLength, shortcut.length), 0);
     createCsvFileForAllLanguages(shortcuts, languageIds, shortcutToSnippets);
     createTxtFileForAllLanguages(shortcuts, maxShortcutLength, shortcutToSnippets);
@@ -76,9 +77,10 @@ function createCsvFileForAllLanguages(
     const rows = new Array<ReadonlyArray<string>>();
     rows.push(["shortcut", ...languageIds]);
     for (const shortcut of shortcuts) {
-        const snippetIdColumns = languageIds.map(languageId => {
-            return shortcutToSnippets.get(shortcut)?.filter(snippet => snippet.languages.has(languageId))[0]?.id ?? "";
-        });
+        const snippetIdColumns = languageIds.map(
+            languageId =>
+                shortcutToSnippets.get(shortcut)?.filter(snippet => snippet.languages.has(languageId))[0]?.id ?? ""
+        );
         rows.push([shortcut, ...snippetIdColumns]);
     }
     writeFile("dist/reports/all", "all-languages.csv", rows.map(row => row.join(",")).join("\n"));
@@ -100,12 +102,14 @@ function createTxtFileForAllLanguages(
 
 function renderIdsWithLanguages(snippets: ReadonlyArray<Snippet>) {
     const groups = new Array<string>();
-    const ids = Array.from(new Set(snippets.map(snippet => snippet.id))).sort();
+    const ids = Array.from(new Set(snippets.map(snippet => snippet.id))).sort((a, b) => a.localeCompare(b));
     ids.forEach(id => {
         const snippetsForId = snippets.filter(snippet => snippet.id === id);
         const languages = new Set<LanguageId>();
         snippetsForId.forEach(snippet => snippet.languages.forEach(languageId => languages.add(languageId)));
-        const concatenatedLanguages = Array.from(languages).sort().join(",");
+        const concatenatedLanguages = Array.from(languages)
+            .sort((a, b) => a.localeCompare(b))
+            .join(",");
         groups.push(`${id} (${concatenatedLanguages})`);
     });
     return groups.join(" ");

@@ -87,7 +87,7 @@ addSnippets(
         body: body //
             .line("loop do")
             .line("\t", CURSOR, SELECTED_TEXT)
-            .line("\tbreak unless ", VARIABLE(1))
+            .line("\tbreak unless ", VARIABLE(1)) // NOSONAR
             .line("end"),
     },
     {
@@ -126,7 +126,7 @@ addSnippets(
     {
         ...DO_WHILE,
         body: body //
-            .line("while : ; do")
+            .line("while : ; do") // NOSONAR
             .line("\t", CURSOR, SELECTED_TEXT)
             .line("    [[ ", VARIABLE(1), " ]] || break")
             .line("done"),

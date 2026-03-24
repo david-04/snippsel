@@ -12,7 +12,7 @@ import { Snippet } from "./snippet.js";
 export type SnippetBase = {
     readonly id: string;
     readonly shortcuts: string | ReadonlyArray<string>;
-    readonly voiceCommands: string | ReadonlyArray<string>;
+    readonly voiceCommands?: string | ReadonlyArray<string>;
     readonly body: SnippetBody;
 };
 
@@ -36,7 +36,10 @@ export class SnippetRepository {
                 id: snippet.id,
                 languages: snippet.languages.toLanguages(),
                 shortcuts: SnippetRepository.normalizeShortcutsOrVoiceCommands(snippet.shortcuts),
-                voiceCommands: SnippetRepository.normalizeShortcutsOrVoiceCommands(snippet.voiceCommands),
+                voiceCommands:
+                    undefined === snippet.voiceCommands
+                        ? []
+                        : SnippetRepository.normalizeShortcutsOrVoiceCommands(snippet.voiceCommands),
                 body: snippet.body,
             })
         );

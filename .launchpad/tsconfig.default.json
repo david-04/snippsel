@@ -3,7 +3,6 @@
         "allowArbitraryExtensions": false,
         "allowImportingTsExtensions": false,
         "allowJs": false,
-        "allowSyntheticDefaultImports": false,
         "allowUmdGlobalAccess": false,
         "allowUnreachableCode": false,
         "allowUnusedLabels": false,
@@ -14,11 +13,10 @@
         "disableReferencedProjectLoad": false,
         "disableSolutionSearching": false,
         "disableSourceOfProjectReferenceRedirect": false,
-        "downlevelIteration": false,
         "emitBOM": false,
         "emitDeclarationOnly": false,
         "emitDecoratorMetadata": false,
-        "esModuleInterop": true,
+        "erasableSyntaxOnly": false,
         "exactOptionalPropertyTypes": true,
         "experimentalDecorators": false,
         "forceConsistentCasingInFileNames": true,
@@ -28,6 +26,10 @@
         "inlineSources": false,
         "isolatedDeclarations": false,
         "isolatedModules": true,
+        "lib": [
+            "es2022"
+        ],
+        "libReplacement": false,
         "module": "nodenext",
         "moduleDetection": "force",
         "moduleResolution": "nodenext",
@@ -53,6 +55,8 @@
         "resolveJsonModule": true,
         "resolvePackageJsonExports": true,
         "resolvePackageJsonImports": true,
+        "rewriteRelativeImportExtensions": false,
+        "rootDir": "../src",
         "skipLibCheck": true,
         "sourceMap": true,
         "strict": true,
@@ -64,12 +68,12 @@
         "stripInternal": true,
         "target": "es2022",
         "tsBuildInfoFile": "../build/.tsbuildinfo",
+        "types": [
+            "*"
+        ],
         "useDefineForClassFields": true,
         "useUnknownInCatchVariables": true,
-        "verbatimModuleSyntax": false,
-        "lib": [
-            "es2022"
-        ]
+        "verbatimModuleSyntax": false
     },
     "include": [
         "../src/**/*.ts",
@@ -79,4 +83,3 @@
         "esm": true
     }
 }
-

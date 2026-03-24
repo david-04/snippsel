@@ -1,3 +1,4 @@
+import { Config } from "../data/config.js";
 import { Placeholder } from "../data/placeholder.js";
 import { snippetRepository } from "../data/snippet-repository.js";
 import { Snippet } from "../data/snippet.js";
@@ -18,9 +19,9 @@ type VSCodeSnippet = {
 // Create and save VSCode snippets
 //----------------------------------------------------------------------------------------------------------------------
 
-export function createVSCodeSnippets() {
+export function createVSCodeSnippets(config: Config) {
     snippetRepository.groupByVsCodeLanguageId().forEach((snippets, vsCodeLanguageId) => {
-        const vscodeSnippets = snippets.flatMap(toVsCodeSnippetStrings);
+        const vscodeSnippets = snippets.flatMap(snippet => toVsCodeSnippetStrings(snippet, config));
         writeFile("dist/vscode", `${vsCodeLanguageId}.json`, `{\n${vscodeSnippets.join(",\n")}\n}\n`);
     });
 }
@@ -29,14 +30,16 @@ export function createVSCodeSnippets() {
 // Render all snippets
 //----------------------------------------------------------------------------------------------------------------------
 
-function toVsCodeSnippetStrings(snippet: Snippet) {
+function toVsCodeSnippetStrings(snippet: Snippet, config: Config) {
     return [
         ...Array.from(snippet.shortcuts).map(shortcut =>
-            toVsCodeSnippet(snippet, shortcutToSnippetName(shortcut), shortcut)
+            toVsCodeSnippet(snippet, shortcutToSnippetName(shortcut, config), shortcut)
         ),
-        ...Array.from(snippet.voiceCommands).map(voiceCommand =>
-            toVsCodeSnippet(snippet, voiceCommandToSnippetName(voiceCommand))
-        ),
+        ...(config.enableVoiceCommands
+            ? Array.from(snippet.voiceCommands).map(voiceCommand =>
+                  toVsCodeSnippet(snippet, voiceCommandToSnippetName(voiceCommand, config))
+              )
+            : []),
     ] as const;
 }
 

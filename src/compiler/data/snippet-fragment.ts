@@ -29,7 +29,10 @@ export class SnippetFragment {
         this.id = descriptor.id;
         this.languages = descriptor.languages;
         this.shortcuts = SnippetRepository.normalizeShortcutsOrVoiceCommands(descriptor.shortcuts);
-        this.voiceCommands = SnippetRepository.normalizeShortcutsOrVoiceCommands(descriptor.voiceCommands);
+        this.voiceCommands =
+            descriptor.voiceCommands === undefined
+                ? []
+                : SnippetRepository.normalizeShortcutsOrVoiceCommands(descriptor.voiceCommands);
         this.body = descriptor.body;
         this.leadingSeparator = descriptor.leadingSeparator;
     }
@@ -38,23 +41,12 @@ export class SnippetFragment {
     // Clone and manipulate the snippet fragment
     //------------------------------------------------------------------------------------------------------------------
 
-    public withLeadingSeparator(separator: string = " ") {
+    public withLeadingSeparator(separator = " ") {
         return new SnippetFragment({ ...this, leadingSeparator: separator });
     }
 
     public withoutLeadingSeparator() {
         return this.withLeadingSeparator("");
-    }
-
-    public toImplied() {
-        return new SnippetFragment({
-            id: `${this.id}[implied]`,
-            languages: this.languages,
-            shortcuts: "",
-            voiceCommands: "",
-            body: this.body,
-            leadingSeparator: this.leadingSeparator,
-        });
     }
 }
 
@@ -67,16 +59,12 @@ export class OneOfPermutation {
 
     public constructor(readonly fragments: ReadonlyArray<PermutableSnippet>) {}
 
-    public withLeadingSeparator(separator: string = " "): OneOfPermutation {
+    public withLeadingSeparator(separator = " "): OneOfPermutation {
         return new OneOfPermutation(this.fragments.map(fragment => fragment.withLeadingSeparator(separator)));
     }
 
     public withoutLeadingSeparator() {
         return this.withLeadingSeparator("");
-    }
-
-    public toImplied(): OneOfPermutation {
-        return new OneOfPermutation(this.fragments.map(fragment => fragment.toImplied()));
     }
 }
 
@@ -85,16 +73,12 @@ export class OptionalPermutation {
 
     public constructor(readonly fragment: PermutableSnippet) {}
 
-    public withLeadingSeparator(separator: string = " "): OptionalPermutation {
+    public withLeadingSeparator(separator = " "): OptionalPermutation {
         return new OptionalPermutation(this.fragment.withLeadingSeparator(separator));
     }
 
     public withoutLeadingSeparator() {
         return this.withLeadingSeparator("");
-    }
-
-    public toImplied(): OptionalPermutation {
-        return new OptionalPermutation(this.fragment.toImplied());
     }
 }
 
@@ -111,10 +95,6 @@ export class SequencePermutation {
 
     public withoutLeadingSeparator() {
         return this.withLeadingSeparator("");
-    }
-
-    public toImplied(): SequencePermutation {
-        return new SequencePermutation(this.fragments.map(fragment => fragment.toImplied()));
     }
 }
 
@@ -141,21 +121,21 @@ export function fragment(descriptor: {
     readonly id: string;
     readonly languages: LanguageBuilder;
     readonly shortcuts: string | ReadonlyArray<string>;
-    readonly voiceCommands: string | ReadonlyArray<string>;
+    readonly voiceCommands?: string | ReadonlyArray<string>;
     readonly leadingSeparator?: string;
     readonly body: SnippetBody;
     readonly aliases?: ReadonlyArray<{
         readonly id: string;
         readonly languages?: LanguageBuilder;
         readonly shortcuts: string | ReadonlyArray<string>;
-        readonly voiceCommands: string | ReadonlyArray<string>;
+        readonly voiceCommands?: string | ReadonlyArray<string>;
     }>;
 }) {
     const fragment: ConstructorParameters<typeof SnippetFragment>[0] = {
         id: descriptor.id,
         languages: descriptor.languages.toLanguages(),
         shortcuts: descriptor.shortcuts,
-        voiceCommands: descriptor.voiceCommands,
+        voiceCommands: descriptor.voiceCommands ?? [],
         leadingSeparator: descriptor.leadingSeparator ?? " ",
         body: descriptor.body,
     };
@@ -165,14 +145,6 @@ export function fragment(descriptor: {
         languages: alias.languages?.toLanguages() ?? fragment.languages,
     }));
     return oneOf(...[fragment, ...aliases].map(fragmentDescriptor => new SnippetFragment(fragmentDescriptor)));
-}
-
-export function implied(fragment: PermutableSnippet) {
-    return fragment.toImplied();
-}
-
-export function explicitOrImplied(fragment: PermutableSnippet) {
-    return oneOf(fragment, implied(fragment));
 }
 
 export function oneOf(...fragments: ReadonlyArray<PermutableSnippet>) {

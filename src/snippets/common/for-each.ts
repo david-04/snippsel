@@ -17,7 +17,15 @@ addSnippets(
     {
         ...FOR_EACH,
         body: body //
-            .line("for ", VARIABLE(1, "key"), ", ", VARIABLE(2, "value"), " in ", VARIABLE(3, "object"), " {")
+            .line(
+                "for ",
+                VARIABLE(1, "key"),
+                ", ",
+                VARIABLE(2, "value"),
+                " in ",
+                VARIABLE(3, "object"), // NOSONAR
+                " {"
+            )
             .line("\t", CURSOR, SELECTED_TEXT)
             .line("}"),
     },
@@ -31,14 +39,30 @@ addSnippets(
     {
         ...FOR_EACH_KEY,
         body: body //
-            .line("for ", VARIABLE(1, "key"), ", ", VARIABLE(2, "value"), " in ", VARIABLE(3, "object"), " {")
+            .line(
+                "for ",
+                VARIABLE(1, "key"),
+                ", ",
+                VARIABLE(2, "value"),
+                " in ",
+                VARIABLE(3, "object"), // NOSONAR
+                " {"
+            )
             .line("\t", CURSOR, SELECTED_TEXT)
             .line("}"),
     },
     {
         ...FOR_EACH_VALUE,
         body: body //
-            .line("for ", VARIABLE(1, "key"), ", ", VARIABLE(2, "value"), " in ", VARIABLE(3, "object"), " {")
+            .line(
+                "for ",
+                VARIABLE(1, "key"),
+                ", ",
+                VARIABLE(2, "value"),
+                " in ",
+                VARIABLE(3, "object"), // NOSONAR
+                " {"
+            )
             .line("\t", CURSOR, SELECTED_TEXT)
             .line("}"),
     }
@@ -68,7 +92,7 @@ addSnippets(
                 "; ",
                 VARIABLE(1),
                 " < ",
-                VARIABLE(3, "100"),
+                VARIABLE(3, "100"), // NOSONAR
                 "; ",
                 VARIABLE(1),
                 "++) {"
@@ -116,7 +140,7 @@ addSnippets(
                 "; ",
                 VARIABLE(1),
                 " < ",
-                VARIABLE(3, "100"),
+                VARIABLE(3, "100"), // NOSONAR
                 "; ",
                 VARIABLE(1),
                 "++) {"
@@ -149,7 +173,7 @@ addSnippets(
     {
         ...FOR_EACH,
         body: body //
-            .line("for (", VARIABLE(1, "Object object"), " : ", VARIABLE(2, "collection"), ") {")
+            .line("for (", VARIABLE(1, "Object object"), " : ", VARIABLE(2, "collection"), ") {") // NOSONAR
             .line("\t", CURSOR, SELECTED_TEXT)
             .line("}"),
     },
@@ -164,7 +188,7 @@ addSnippets(
                 "; ",
                 VARIABLE(1),
                 " < ",
-                VARIABLE(3, "100"),
+                VARIABLE(3, "100"), // NOSONAR
                 "; ",
                 VARIABLE(1),
                 "++) {"
@@ -197,7 +221,7 @@ addSnippets(
     {
         ...FOR_EACH,
         body: body //
-            .line("for (const ", VARIABLE(1, "key"), " of ", VARIABLE(2, "object"), ") {")
+            .line("for (const ", VARIABLE(1, "key"), " of ", VARIABLE(2, "object"), ") {") // NOSONAR
             .line("\t", CURSOR, SELECTED_TEXT)
             .line("}"),
     },
@@ -212,7 +236,7 @@ addSnippets(
                 "; ",
                 VARIABLE(1),
                 " < ",
-                VARIABLE(3, "100"),
+                VARIABLE(3, "100"), // NOSONAR
                 "; ",
                 VARIABLE(1),
                 "++) {"
@@ -275,7 +299,7 @@ addSnippets(
                 ", ",
                 VARIABLE(2, "value"),
                 " in ",
-                VARIABLE(3, "enumerate(array) | object.__dict__.items()"),
+                VARIABLE(3, "enumerate(array) | object.__dict__.items()"), // NOSONAR
                 "):"
             )
             .line("\t", CURSOR, SELECTED_TEXT),
@@ -289,7 +313,7 @@ addSnippets(
                 " in range(",
                 VARIABLE(2, "0"),
                 ", ",
-                VARIABLE(3, "100, STEP_SIZE"),
+                VARIABLE(3, "100, STEP_SIZE"), // NOSONAR
                 "):"
             )
             .line("\t", CURSOR, SELECTED_TEXT),
@@ -324,7 +348,15 @@ addSnippets(
     {
         ...FOR_EACH_INDEX,
         body: body //
-            .line("for ", VARIABLE(1, "variable"), " in ", VARIABLE(2, "1"), "..", VARIABLE(3, "100"), " do")
+            .line(
+                "for ",
+                VARIABLE(1, "variable"),
+                " in ",
+                VARIABLE(2, "1"),
+                "..",
+                VARIABLE(3, "100"), // NOSONAR
+                " do"
+            )
             .line("\t", CURSOR, SELECTED_TEXT)
             .line("end"),
     },
@@ -360,7 +392,15 @@ addSnippets(
     {
         ...FOR_EACH_INDEX,
         body: body //
-            .line("for ", VARIABLE(1, "VARIABLE"), " in {", VARIABLE(2, "1"), "..", VARIABLE(3, "100"), "}; do")
+            .line(
+                "for ",
+                VARIABLE(1, "VARIABLE"),
+                " in {",
+                VARIABLE(2, "1"),
+                "..",
+                VARIABLE(3, "100"), // NOSONAR
+                "}; do"
+            )
             .line("\t", CURSOR, SELECTED_TEXT)
             .line("done"),
     },

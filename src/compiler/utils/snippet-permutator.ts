@@ -46,7 +46,8 @@ function calculatePermutations(permutableSnippet: PermutableSnippet): Permutatio
                 return calculatePermutationsOneOf(permutableSnippet);
             case "optional":
                 return calculatePermutationsOptional(permutableSnippet);
-            case "sequence":
+            default:
+                permutableSnippet.type satisfies "sequence";
                 return calculatePermutationsSequenceAll(permutableSnippet);
         }
     }
@@ -146,7 +147,7 @@ function assembleBody(permutation: Permutation) {
         lines.push(currentLine);
     }
     const concatenatedBody = lines.reduce((previous, current) => previous.line(...current), body);
-    let placeholderCount = 0;
+    let placeholderCount = 1;
     const normalizedLines = concatenatedBody.lines.map(line => {
         const result = normalizeBodyLine(line, placeholderCount);
         placeholderCount = result.placeholderCount;
@@ -156,31 +157,37 @@ function assembleBody(permutation: Permutation) {
 }
 
 function normalizeBodyLine(line: SnippetBodyLine, placeholderCount: number) {
-    const normalizedLine = new Array<string | VariablePlaceholder>();
+    const normalizedLine = new Array<string | Placeholder>();
     line.forEach(lineItem => {
         if ("string" === typeof lineItem) {
-            if (normalizedLine.length && "string" === normalizedLine[normalizedLine.length - 1]) {
-                normalizedLine[normalizedLine.length - 1] += lineItem;
+            const previousLine = normalizedLine[normalizedLine.length - 1];
+            if (normalizedLine.length && "string" === previousLine) {
+                normalizedLine[normalizedLine.length - 1] = `${previousLine}${lineItem}`;
             } else {
                 normalizedLine.push(lineItem);
             }
         } else {
             const previousLineItem = normalizedLine[normalizedLine.length - 1];
             if (undefined === previousLineItem || "string" === typeof previousLineItem) {
-                normalizedLine.push(normalizePlaceholder(undefined, lineItem, ++placeholderCount));
+                normalizedLine.push(normalizePlaceholder(undefined, lineItem, placeholderCount));
             } else {
-                normalizedLine.push(normalizePlaceholder(previousLineItem, lineItem, ++placeholderCount));
+                normalizedLine.push(normalizePlaceholder(previousLineItem, lineItem, placeholderCount));
             }
+            placeholderCount++;
         }
     });
     return { placeholderCount, normalizedLine };
 }
 
 function normalizePlaceholder(
-    placeholder1: VariablePlaceholder | undefined,
+    placeholder1: Placeholder | undefined,
     placeholder2: Placeholder,
     placeholderIndex: number
 ) {
+    if (!(placeholder2 instanceof VariablePlaceholder) || !(placeholder1 instanceof VariablePlaceholder)) {
+        return placeholder2;
+    }
+
     return placeholder1
         ? placeholder1.cloneAndAppend(placeholder2)
         : VariablePlaceholder.of(placeholderIndex, placeholder2);

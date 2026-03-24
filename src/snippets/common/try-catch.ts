@@ -53,7 +53,7 @@ addSnippets(
             .line("\t", CURSOR, SELECTED_TEXT)
             .line("} catch (Any as ", VARIABLE(1, "error"), ") {")
             .line("\t")
-            .line("} finally {")
+            .line("} finally {") // NOSONAR
             .line("\t")
             .line("} "),
     },

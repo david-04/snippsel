@@ -36,7 +36,7 @@ export function postProcessSnippet(rules: ReadonlyArray<PostProcessingRule>, sni
 }
 
 function applyRule(snippet: PermutedSnippet | undefined, rule: PostProcessingRule) {
-    if (CONDITION_CHECKERS.reduce((matches, checker) => matches && checker(snippet, rule), true)) {
+    if (CONDITION_CHECKERS.every(checker => checker(snippet, rule))) {
         return Object.values(ACTION_HANDLERS).reduce<PermutedSnippet | undefined>(
             (previousSnippet, currentAction) => currentAction(previousSnippet, rule),
             snippet
@@ -74,7 +74,7 @@ function matchesLanguage(snippet: PermutedSnippet, ifLanguage: LanguageId | Lang
 
 function matches(value: string, filter: StringValueFilter) {
     const array = "string" === typeof filter || filter instanceof RegExp ? [filter] : filter;
-    return array.some(pattern => ("string" === typeof pattern ? value === pattern : value.match(pattern)));
+    return array.some(pattern => ("string" === typeof pattern ? value === pattern : pattern.exec(value)));
 }
 
 //----------------------------------------------------------------------------------------------------------------------

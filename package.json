@@ -1,6 +1,6 @@
 {
     "dependencies": {
-        "@types/node": "^22.10.10"
+        "@types/node": "^25.5.0"
     },
     "name": "snippsel",
     "version": "0.0.0",

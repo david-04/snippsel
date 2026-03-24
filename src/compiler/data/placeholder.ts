@@ -54,7 +54,7 @@ export class VariablePlaceholder {
     }
 
     cloneAndAppend(placeholder: Placeholder) {
-        const textToAppend = placeholder instanceof VariablePlaceholder ? placeholder.presetValue ?? "" : "";
+        const textToAppend = placeholder instanceof VariablePlaceholder ? (placeholder.presetValue ?? "") : "";
         const concatenatedText = (this.presetValue ?? "") + textToAppend || undefined;
         return new VariablePlaceholder(this.index, concatenatedText);
     }
@@ -64,7 +64,7 @@ export class VariablePlaceholder {
     }
 
     toVSCode() {
-        return this.presetValue ? `\${${this.index}:${this.presetValue ?? ""}}` : `\$${this.index}`;
+        return this.presetValue ? `\${${this.index}:${this.presetValue ?? ""}}` : `$${this.index}`;
     }
 }
 
@@ -80,7 +80,7 @@ export type Placeholder = CursorPlaceholder | SelectedTextPlaceholder | Variable
 
 export const CURSOR = CursorPlaceholder.INSTANCE;
 export const SELECTED_TEXT = SelectedTextPlaceholder.INSTANCE;
-export const VARIABLE = (index: number, presetValue?: string) => new VariablePlaceholder(index, presetValue);
+export const VARIABLE = (index: number, presetValue?: string) => new VariablePlaceholder(index, presetValue); // NOSONAR
 
 export function placeholder(): PermutableSnippet;
 export function placeholder(index: number, presetValue?: string): PermutableSnippet;
@@ -90,7 +90,6 @@ export function placeholder(indexOrPresetValue?: number | string, presetValue?: 
         id: "",
         languages: LANGUAGES.all,
         shortcuts: "",
-        voiceCommands: "",
         body: body.line(
             VARIABLE(
                 "number" === typeof indexOrPresetValue ? indexOrPresetValue : 1,

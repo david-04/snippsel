@@ -2,7 +2,7 @@
 // Print an error message and exit
 //----------------------------------------------------------------------------------------------------------------------
 
-export function fail(message: string) {
+export function fail(message: string): never {
     console.error(`⛔ ERROR: ${message}`);
     process.exit(1);
 }

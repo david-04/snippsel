@@ -17,27 +17,27 @@ addSnippets(
     {
         ...COMMENT_BLOCK,
         languages: LANGUAGES.ahk,
-        body: body.line(";", dashes(119)).line("; ", CURSOR).line(";", dashes(119)),
+        body: body.line(";", dashes(119)).line("; ", CURSOR).line(";", dashes(119)), // NOSONAR
     },
     {
         ...COMMENT_BLOCK,
         languages: LANGUAGES.awk.ini.make.py.rb.sh,
-        body: body.line("#", dashes(119)).line("# ", CURSOR).line("#", dashes(119)),
+        body: body.line("#", dashes(119)).line("# ", CURSOR).line("#", dashes(119)), // NOSONAR
     },
     {
         ...COMMENT_BLOCK,
         languages: LANGUAGES.bat,
-        body: body.line("REM ", dashes(116)).line("REM ", CURSOR).line("REM ", dashes(116)),
+        body: body.line("REM ", dashes(116)).line("REM ", CURSOR).line("REM ", dashes(116)), // NOSONAR
     },
     {
         ...COMMENT_BLOCK,
         languages: LANGUAGES.c.css,
-        body: body.line("/*", dashes(118)).line("// ", CURSOR).line("//", dashes(116), "*/"),
+        body: body.line("/*", dashes(118)).line("// ", CURSOR).line("//", dashes(116), "*/"), // NOSONAR
     },
     {
         ...COMMENT_BLOCK,
         languages: LANGUAGES.sql,
-        body: body.line("-- ", dashes(117)).line("-- ", CURSOR).line("-- ", dashes(117)),
+        body: body.line("-- ", dashes(117)).line("-- ", CURSOR).line("-- ", dashes(117)), // NOSONAR
     }
 );
 

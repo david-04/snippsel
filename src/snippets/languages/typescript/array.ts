@@ -92,7 +92,7 @@ addSnippets(
     oneOf(arrayOf, readonlyArrayOf), //
     [
         { removeShortcut: "a" }, // already defined in "common"
-        { removeVoiceCommand: /^(array)$/ }, // already defined in "common"
+        { removeVoiceCommand: /^array$/ }, // already defined in "common"
     ]
 );
 
